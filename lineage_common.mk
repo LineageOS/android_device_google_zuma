@@ -19,3 +19,6 @@ PRODUCT_PACKAGES += \
 # Linker config
 PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
     device/google/zuma/linker.config.json
+
+# Touch
+include hardware/google/pixel/touch/device.mk
