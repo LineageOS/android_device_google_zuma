@@ -6,3 +6,7 @@
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += device/google/zuma/overlay-lineage
+
+# EUICC
+PRODUCT_PACKAGES += \
+    EuiccSupportPixelOverlay
