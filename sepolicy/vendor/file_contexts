@@ -8,6 +8,7 @@
 /vendor/bin/hw/android\.hardware\.usb\.gadget-service                       u:object_r:hal_usb_gadget_impl_exec:s0
 /vendor/bin/hw/android\.hardware\.secure_element-service.uicc               u:object_r:hal_secure_element_uicc_exec:s0
 /vendor/bin/hw/android\.hardware\.qorvo\.uwb\.service                       u:object_r:hal_uwb_vendor_default_exec:s0
+/vendor/bin/hw/android\.hardware\.qorvo\.uwb-service                        u:object_r:hal_uwb_default_exec:s0
 /vendor/bin/hw/android\.hardware\.composer\.hwc3-service\.pixel             u:object_r:hal_graphics_composer_default_exec:s0
 /vendor/bin/hw/google\.hardware\.media\.c2@2\.0-service                     u:object_r:mediacodec_google_exec:s0
 /vendor/bin/hw/vendor\.dolby\.media\.c2@1\.0-service                        u:object_r:mediacodec_exec:s0
