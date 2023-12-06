@@ -15,3 +15,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # EUICC
 PRODUCT_PACKAGES += \
     EuiccSupportPixelOverlay
+
+# Linker config
+PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
+    device/google/zuma/linker.config.json
