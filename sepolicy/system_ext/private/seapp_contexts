@@ -1,3 +1,0 @@
-# SystemUI
-user=_app seinfo=platform name=com.android.systemui domain=systemui_app type=app_data_file levelFrom=all
-user=_app seinfo=platform name=com.android.systemui:* domain=systemui_app type=app_data_file levelFrom=all
