@@ -92,6 +92,18 @@ genfscon sysfs /devices/platform/19440000.drmdsim/19440000.drmdsim.0/backlight/p
 genfscon sysfs /devices/platform/19440000.drmdsim/19440000.drmdsim.0/error_count_te                       u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/19440000.drmdsim/19440000.drmdsim.0/error_count_unknown                  u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport/dp_hotplug_error_code                     u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport-stats/link_negotiation_failures           u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport-stats/edid_read_failures                  u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport-stats/dpcd_read_failures                  u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport-stats/edid_invalid_failures               u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport-stats/sink_count_invalid_failures         u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/110f0000.drmdp/drm-displayport-stats/link_unstable_failures              u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/hdcp/hdcp2_success_count                                                 u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/hdcp/hdcp2_fallback_count                                                u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/hdcp/hdcp2_fail_count                                                    u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/hdcp/hdcp1_success_count                                                 u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/hdcp/hdcp1_fail_count                                                    u:object_r:sysfs_display:s0
+genfscon sysfs /devices/platform/hdcp/hdcp0_count                                                         u:object_r:sysfs_display:s0
 
 # ACPM
 genfscon sysfs /devices/platform/acpm_stats                                                            u:object_r:sysfs_acpm_stats:s0
