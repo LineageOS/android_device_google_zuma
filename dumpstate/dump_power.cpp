@@ -439,24 +439,49 @@ void printValuesOfDirectory(const char *directory, std::string debugfs, const ch
     files.clear();
 }
 
+void dumpChg() {
+    const std::string pmic_bus = "/sys/devices/platform/10cb0000.hsi2c/i2c-11/11-0066";
+    const char* chg_reg_dump_file = "/sys/class/power_supply/main-charger/device/registers_dump";
+    const std::string chg_name_cmd = "/sys/class/power_supply/main-charger/device/name";
+    const std::string pmic_name_cmd = pmic_bus + "/name";
+    const std::string pmic_reg_dump_file = pmic_bus + "/registers_dump";
+    const std::string reg_dump_str = " registers dump";
+    const char* chgConfig [][2] {
+        {"DC_registers dump", "/sys/class/power_supply/dc-mains/device/registers_dump"},
+    };
+    std::string chg_name;
+    std::string pmic_name;
+
+    printf("\n");
+
+    int ret = android::base::ReadFileToString(chg_name_cmd, &chg_name);
+    if (ret && !chg_name.empty()) {
+        chg_name.erase(chg_name.length() - 1); // remove new line
+        const std::string chg_reg_dump_title = chg_name + reg_dump_str;
+
+        /* CHG reg dump */
+        dumpFileContent(chg_reg_dump_title.c_str(), chg_reg_dump_file);
+    }
+
+    ret = android::base::ReadFileToString(pmic_name_cmd, &pmic_name);
+    if (ret && !pmic_name.empty()) {
+        pmic_name.erase(pmic_name.length() - 1); // remove new line
+        const std::string pmic_reg_dump_title = pmic_name + reg_dump_str;
+
+        /* PMIC reg dump */
+        dumpFileContent(pmic_reg_dump_title.c_str(), pmic_reg_dump_file.c_str());
+    }
+
+    for (auto &config : chgConfig) {
+        dumpFileContent(config[0], config[1]);
+    }
+}
+
 void dumpChgUserDebug() {
-    const char *chgDebugMax77759 [][2] {
-            {"max77759_chg registers dump", "/d/max77759_chg/registers"},
-            {"max77729_pmic registers dump", "/d/max77729_pmic/registers"},
-    };
-    const char *chgDebugMax77779 [][2] {
-            {"max77779_chg registers dump", "/d/max77779_chg/registers"},
-            {"max77779_pmic registers dump", "/d/max77779_pmic/registers"},
-    };
-
     const std::string debugfs = "/d/";
-
     const char *maxFgDir = "/d/maxfg";
     const char *maxFgStrMatch = "maxfg";
     const char *maxFg77779StrMatch = "max77779fg";
-    const char *baseChgDir = "/d/max77759_chg";
-    const char *dcRegName = "DC_registers dump";
-    const char *dcRegDir = "/sys/class/power_supply/dc-mains/device/registers_dump";
     const char *chgTblName = "Charging table dump";
     const char *chgTblDir = "/d/google_battery/chg_raw_profile";
 
@@ -478,20 +503,6 @@ void dumpChgUserDebug() {
 
     if (isUserBuild())
         return;
-
-    if (isValidFile(dcRegDir)) {
-        dumpFileContent(dcRegName, dcRegDir);
-    }
-
-    if (isValidDir(baseChgDir)) {
-        for (auto &row : chgDebugMax77759) {
-            dumpFileContent(row[0], row[1]);
-        }
-    } else {
-        for (auto &row : chgDebugMax77779) {
-            dumpFileContent(row[0], row[1]);
-        }
-    }
 
     dumpFileContent(chgTblName, chgTblDir);
 
@@ -944,6 +955,7 @@ int main() {
     dumpLn8411();
     dumpBatteryHealth();
     dumpBatteryDefend();
+    dumpChg();
     dumpChgUserDebug();
     dumpBatteryEeprom();
     dumpChargerStats();
