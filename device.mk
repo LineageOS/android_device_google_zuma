@@ -89,6 +89,11 @@ LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 # Set the environment variable to switch the Keymint HAL service to Rust
 TRUSTY_KEYMINT_IMPL := rust
 
+ifeq ($(RELEASE_AVF_ENABLE_LLPVM_CHANGES),true)
+	# Set the environment variable to enable the Secretkeeper HAL service.
+	SECRETKEEPER_ENABLED := true
+endif
+
 # OEM Unlock reporting
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.oem_unlock_supported=1
@@ -833,7 +838,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/trusty/common
 
 PRODUCT_PACKAGES += \
- 	trusty_metricsd
+	trusty_metricsd
 
 $(call soong_config_set,google_displaycolor,displaycolor_platform,zuma)
 PRODUCT_PACKAGES += \
@@ -1192,8 +1197,8 @@ include device/google/gs-common/pixel_ril/ril.mk
 endif
 
 # Touch service
-include hardware/google/pixel/input/twoshay.mk
 include device/google/gs-common/touch/twoshay/aidl_zuma.mk
+include device/google/gs-common/touch/twoshay/twoshay.mk
 
 # Allow longer timeout for incident report generation in bugreport
 # Overriding in /product partition instead of /vendor intentionally,
