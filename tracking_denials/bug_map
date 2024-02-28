@@ -9,7 +9,6 @@ mtectrl unlabeled dir b/264483752
 pixelstats_vendor sysfs file b/299553682
 rfsd vendor_cbd_prop file b/323086582
 system_server sysfs_batteryinfo file b/294967729
-system_suspend sysfs dir b/320693841
 system_suspend sysfs_batteryinfo dir b/317316633
 vendor_init default_prop file b/315104235
 vendor_init default_prop file b/315104803
