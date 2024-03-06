@@ -97,7 +97,11 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     .CCARatePath = "/sys/devices/platform/audiometrics/cca_count_read_once",
     .PcmLatencyPath = "/sys/devices/platform/audiometrics/pcm_latency",
     .PcmCountPath = "/sys/devices/platform/audiometrics/pcm_count",
-    .TotalCallCountPath = "/sys/devices/platform/audiometrics/call_count"
+    .TotalCallCountPath = "/sys/devices/platform/audiometrics/call_count",
+    .OffloadEffectsIdPath = "/sys/devices/platform/audiometrics/offload_effects_id",
+    .OffloadEffectsDurationPath = "/sys/devices/platform/audiometrics/offload_effects_duration",
+    .BluetoothAudioUsagePath = "/sys/devices/platform/audiometrics/bt_usage",
+    .GMSRPath = "/sys/class/power_supply/maxfg/gmsr"
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {

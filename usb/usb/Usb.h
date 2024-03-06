@@ -22,6 +22,7 @@
 #include <pixelusb/UsbOverheatEvent.h>
 #include <sys/eventfd.h>
 #include <utils/Log.h>
+#include <UsbDataSessionMonitor.h>
 
 #define UEVENT_MSG_LEN 2048
 // The type-c stack waits for 4.5 - 5.5 secs before declaring a port non-pd.
@@ -31,6 +32,13 @@
 #define PORT_TYPE_TIMEOUT 8
 #define DISPLAYPORT_CAPABILITIES_RECEPTACLE_BIT 6
 #define DISPLAYPORT_STATUS_DEBOUNCE_MS 2000
+/*
+ * Type-C HAL should wait 2 seconds to reattempt DisplayPort Alt Mode entry to
+ * allow the port and port partner to settle Role Swaps.
+ */
+#define DISPLAYPORT_ACTIVATE_DEBOUNCE_MS 2000
+// Number of times the HAL should reattempt to enter DisplayPort Alt Mode
+#define DISPLAYPORT_ACTIVATE_MAX_RETRIES 2
 
 namespace aidl {
 namespace android {
@@ -59,6 +67,8 @@ constexpr char kGadgetName[] = "11210000.dwc3";
 #define VBUS_PATH NEW_UDC_PATH "dwc3_exynos_otg_b_sess"
 #define USB_DATA_PATH NEW_UDC_PATH "usb_data_enabled"
 
+#define DISPLAYPORT_ACTIVE_PATH "/sys/class/typec/port0/port0.0/mode1/active"
+
 #define LINK_TRAINING_STATUS_UNKNOWN "0"
 #define LINK_TRAINING_STATUS_SUCCESS "1"
 #define LINK_TRAINING_STATUS_FAILURE "2"
@@ -69,6 +79,9 @@ constexpr char kGadgetName[] = "11210000.dwc3";
 #define DISPLAYPORT_IRQ_HPD_COUNT_CHECK 3
 
 #define DISPLAYPORT_POLL_WAIT_MS 100
+
+#define SVID_DISPLAYPORT "ff01"
+#define SVID_THUNDERBOLT "8087"
 
 struct Usb : public BnUsb {
     Usb();
@@ -108,6 +121,8 @@ struct Usb : public BnUsb {
     // Variable to signal partner coming back online after type switch
     bool mPartnerUp;
 
+    // Report usb data session event and data incompliance warnings
+    UsbDataSessionMonitor mUsbDataSessionMonitor;
     // Usb Overheat object for push suez event
     UsbOverheatEvent mOverheat;
     // Temperature when connected
@@ -137,6 +152,11 @@ struct Usb : public BnUsb {
      *        sending notifications to the frameworks layer.
      */
     int mDisplayPortDebounceTimer;
+    /*
+     * eventfd to monitor whether a connection results in DisplayPort Alt Mode activating.
+     */
+    int mDisplayPortActivateTimer;
+
   private:
     pthread_t mPoll;
     pthread_t mDisplayPortPoll;

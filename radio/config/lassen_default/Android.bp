@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 The Android Open Source Project
+// Copyright (C) 2023 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,43 +24,10 @@ package {
     ],
 }
 
-cc_binary {
-    name: "android.hardware.boot@1.0-service-zuma",
-    defaults: ["hidl_defaults"],
-    relative_install_path: "hw",
+prebuilt_etc {
+    name: "lassen_default.conf",
     vendor: true,
-    init_rc: ["android.hardware.boot@1.0-service-zuma.rc"],
-    srcs: [
-        "BootControl.cpp",
-        "GptUtils.cpp",
-        "service.cpp"
-    ],
-    shared_libs: [
-        "libbase",
-        "liblog",
-        "libhidlbase",
-        "libutils",
-        "libcutils",
-        "libz",
-        "android.hardware.boot@1.0",
-    ],
-}
-
-cc_library {
-    name: "android.hardware.boot@1.0-impl-zuma",
-    recovery: true,
-    srcs: [
-        "BootControl.cpp",
-        "GptUtils.cpp",
-    ],
-    relative_install_path: "hw",
-    shared_libs: [
-        "libbase",
-        "liblog",
-        "libhidlbase",
-        "libutils",
-        "libcutils",
-        "libz",
-        "android.hardware.boot@1.0",
-    ],
+    proprietary: true,
+    src: "logging.conf",
+    relative_install_path: "radio/log_masks/lassen_default"
 }

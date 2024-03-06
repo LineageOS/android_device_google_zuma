@@ -23,14 +23,16 @@ include device/google/gs-common/aoc/aoc.mk
 include device/google/gs-common/trusty/trusty.mk
 include device/google/gs-common/pcie/pcie.mk
 include device/google/gs-common/storage/storage.mk
-include device/google/gs-common/thermal/thermal.mk
+include device/google/gs-common/thermal/dump/thermal.mk
+include device/google/gs-common/thermal/thermal_hal/device.mk
 include device/google/gs-common/performance/perf.mk
 include device/google/gs-common/pixel_metrics/pixel_metrics.mk
 include device/google/gs-common/soc/freq.mk
 include device/google/gs-common/gps/dump/log.mk
 include device/google/gs-common/bcmbt/dump/dumplog.mk
 include device/google/gs-common/display/dump.mk
-include device/google/gs-common/gxp/dump.mk
+include device/google/gs-common/display_logbuffer/dump.mk
+include device/google/gs-common/gxp/gxp.mk
 include device/google/gs-common/camera/dump.mk
 include device/google/gs-common/radio/dump.mk
 include device/google/gs-common/gear/dumpstate/aidl.mk
@@ -39,6 +41,7 @@ include device/google/gs-common/widevine/widevine.mk
 include device/google/gs-common/sota_app/factoryota.mk
 include device/google/gs-common/misc_writer/misc_writer.mk
 include device/google/gs-common/gyotaku_app/gyotaku.mk
+include device/google/gs-common/bootctrl/bootctrl_aidl.mk
 
 include device/google/zuma/dumpstate/item.mk
 
@@ -118,9 +121,13 @@ ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.logd.size=1M
 # b/114766334: persist all logs by default rotating on 30 files of 1MiB
+# change to 60 files for zuma
 PRODUCT_PROPERTY_OVERRIDES += \
 	logd.logpersistd=logcatd \
-	logd.logpersistd.size=30
+	logd.logpersistd.size=60
+
+PRODUCT_PRODUCT_PROPERTIES += \
+	ro.logcat.compress=true
 endif
 
 # From system.property
@@ -191,10 +198,18 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # Carrier configuration default location
 PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.radio.config.carrier_config_dir=/mnt/vendor/modem_img/images/default/confpack
+	persist.vendor.radio.config.carrier_config_dir=/vendor/firmware/carrierconfig
 
 PRODUCT_PROPERTY_OVERRIDES += \
 	telephony.active_modems.max_count=2
+
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.usb.displayport.enabled=1
+else
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.usb.displayport.enabled=0
+endif
 
 USE_LASSEN_OEMHOOK := true
 
@@ -228,6 +243,7 @@ PRODUCT_SOONG_NAMESPACES += \
 $(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 $(call soong_config_set,arm_gralloc,soc,$(TARGET_BOARD_PLATFORM))
 
+include device/google/gs-common/gpu/gpu.mk
 PRODUCT_PACKAGES += \
 	csffw_image_prebuilt__firmware_prebuilt_ttux_mali_csffw.bin \
 	libGLES_mali \
@@ -256,7 +272,7 @@ endif
 PRODUCT_VENDOR_PROPERTIES += \
 	vendor.mali.platform.config=/vendor/etc/mali/platform.config \
 	vendor.mali.debug.config=/vendor/etc/mali/debug.config \
-      	vendor.mali.base_protected_max_core_count=1 \
+	vendor.mali.base_protected_max_core_count=1 \
 	vendor.mali.base_protected_tls_max=67108864 \
 	vendor.mali.platform_agt_frequency_khz=24576
 
@@ -279,6 +295,9 @@ PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
 	graphics.gpu.profiler.support=true \
 	debug.renderengine.backend=skiaglthreaded \
+
+# b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
+PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 
 # GRAPHICS - GPU (end)
 # ####################
@@ -405,6 +424,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.verbose_logging_enabled=false
 endif
 
+# Vendor modem extensive logging default property
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.modem.extensive_logging_enabled=false
+
 # CP Logging properties
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
@@ -527,7 +550,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
 	android.hardware.graphics.mapper@4.0-impl \
-	android.hardware.graphics.allocator-V1-service
+	android.hardware.graphics.allocator-V2-service
 
 PRODUCT_PACKAGES += \
 	android.hardware.memtrack-service.pixel \
@@ -588,7 +611,7 @@ include device/google/gs-common/battery_mitigation/bcl.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/android_t_baseline.mk)
-PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := gz
+PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := lz4
 
 # Enforce generic ramdisk allow list
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
@@ -663,6 +686,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.sf.duration=16600000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=16600000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.frame_rate_multiple_threshold=120
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.treat_170m_as_sRGB=1
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.hwc_hotplug_error_via_neg_vsync=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.enable_layer_caching=true
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
@@ -797,11 +821,12 @@ endif
 $(call inherit-product, system/core/trusty/trusty-storage.mk)
 $(call inherit-product, system/core/trusty/trusty-base.mk)
 
-# Trusty unit test tool
+# Trusty unit test tool and code coverage tool
 PRODUCT_PACKAGES_DEBUG += \
    trusty-ut-ctrl \
    tipc-test \
    trusty_stats_test \
+   trusty-coverage-controller \
 
 include device/google/gs101/confirmationui/confirmationui.mk
 
@@ -885,10 +910,6 @@ $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHA
 
 PRODUCT_PACKAGES += ShannonIms
 
-#RCS Test Messaging App
-PRODUCT_PACKAGES_DEBUG += \
-	TestRcsApp
-
 PRODUCT_PACKAGES += ShannonRcs
 
 ifeq (,$(filter aosp_% factory_%,$(TARGET_PRODUCT)))
@@ -905,11 +926,6 @@ endif
 PRODUCT_PACKAGES += \
 	ImsMediaService \
 	libimsmedia
-
-# Boot Control HAL
-PRODUCT_PACKAGES += \
-	android.hardware.boot-service.default-zuma\
-	android.hardware.boot-service.default_recovery-zuma
 
 # Exynos RIL and telephony
 # Multi SIM(DSDS)
@@ -963,19 +979,39 @@ endif
 # modem logging binary/configs
 PRODUCT_PACKAGES += modem_logging_control
 
-# modem logging configs
+# PILOT SCENARIOS
+PRODUCT_PACKAGES += \
+	Pixel_stability.cfg \
+	Pixel_stability.nprf
+
+# Default modem log mask for pixel logger
 PRODUCT_PACKAGES += \
 	logging.conf \
 	default.cfg \
 	default.nprf \
 	default_metrics.xml \
-	Pixel_stability.cfg \
-	Pixel_stability.nprf
+	extensive_logging.conf
+
+# Log Masks for logmasklibrary below
+# default modem log mask
+PRODUCT_PACKAGES += \
+	default_modem_log_mask.conf \
+	default_modem_log_mask.cfg \
+	default_modem_log_mask.nprf \
+	default_modem_log_mask.xml
+
+# Empty modem log mask
+PRODUCT_PACKAGES += \
+	empty_modem_log_mask.conf \
+	empty_modem_log_mask.cfg \
+	empty_modem_log_mask.nprf \
+	empty_modem_log_mask.xml
+
+# Lassen default log mask
+PRODUCT_PACKAGES += \
+	lassen_default.conf
 
 endif
-
-# ARM NN files
-ARM_COMPUTE_CL_ENABLE := 1
 
 # Vibrator Diag
 PRODUCT_PACKAGES_DEBUG += \
@@ -990,7 +1026,11 @@ PRODUCT_PACKAGES += \
 
 # Audio
 # Audio HAL Server & Default Implementations
+ifeq ($(RELEASE_PIXEL_AIDL_AUDIO_HAL),true)
+include device/google/gs-common/audio/aidl.mk
+else
 include device/google/gs-common/audio/hidl_zuma.mk
+endif
 
 ## AoC soong
 PRODUCT_SOONG_NAMESPACES += \
@@ -1045,7 +1085,6 @@ PRODUCT_PACKAGES += \
 include device/google/gs101/telephony/pktrouter.mk
 
 # Thermal HAL
-include hardware/google/pixel/thermal/device.mk
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
 
 # EdgeTPU
@@ -1131,10 +1170,6 @@ PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=tr
 # Use HCTR2 for filenames encryption on adoptable storage.
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.crypto.volume.options=aes-256-xts:aes-256-hctr2
-
-# Increase lmkd aggressiveness
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.lmk.swap_free_low_percentage=100
 
 # Hardware Info Collection
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk

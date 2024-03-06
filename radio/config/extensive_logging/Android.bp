@@ -25,17 +25,9 @@ package {
 }
 
 prebuilt_etc {
-    name: "Pixel_stability.cfg",
+    name: "extensive_logging.conf",
     vendor: true,
     proprietary: true,
-    src: "config/Pixel_stability.cfg",
-    relative_install_path: "modem"
-}
-
-prebuilt_etc {
-    name: "Pixel_stability.nprf",
-    vendor: true,
-    proprietary: true,
-    src: "config/Pixel_stability.nprf",
+    src: "extensive_logging.conf",
     relative_install_path: "modem"
 }

@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <chrono>
 #include <regex>
 #include <thread>
 #include <unordered_map>
@@ -42,8 +41,11 @@
 #include "Usb.h"
 
 #include <aidl/android/frameworks/stats/IStats.h>
+#include <android_hardware_usb_flags.h>
 #include <pixelusb/UsbGadgetAidlCommon.h>
 #include <pixelstats/StatsHelper.h>
+
+namespace usb_flags = android::hardware::usb::flags;
 
 using aidl::android::frameworks::stats::IStats;
 using android::base::GetProperty;
@@ -74,6 +76,7 @@ constexpr char kComplianceWarningBC12[] = "bc12";
 constexpr char kComplianceWarningDebugAccessory[] = "debug-accessory";
 constexpr char kComplianceWarningMissingRp[] = "missing_rp";
 constexpr char kComplianceWarningOther[] = "other";
+constexpr char kComplianceWarningInputPowerLimited[] = "input_power_limited";
 constexpr char kStatusPath[] = "-0025/contaminant_detection_status";
 constexpr char kSinkLimitEnable[] = "-0025/usb_limit_sink_enable";
 constexpr char kSourceLimitEnable[] = "-0025/usb_limit_source_enable";
@@ -90,6 +93,17 @@ constexpr char kPogoUsbActive[] = "/sys/devices/platform/google,pogo/pogo_usb_ac
 constexpr char kPogoEnableUsb[] = "/sys/devices/platform/google,pogo/enable_usb";
 constexpr char kPowerSupplyUsbType[] = "/sys/class/power_supply/usb/usb_type";
 constexpr char kIrqHpdCounPath[] = "-0025/irq_hpd_count";
+constexpr char kUdcUeventRegex[] =
+    "/devices/platform/11210000.usb/11210000.dwc3/udc/11210000.dwc3";
+constexpr char kUdcStatePath[] =
+    "/sys/devices/platform/11210000.usb/11210000.dwc3/udc/11210000.dwc3/state";
+constexpr char kHost1UeventRegex[] =
+    "/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.[0-9].auto/usb1/1-0:1.0";
+constexpr char kHost1StatePath[] = "/sys/bus/usb/devices/usb1/1-0:1.0/usb1-port1/state";
+constexpr char kHost2UeventRegex[] =
+    "/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.[0-9].auto/usb2/2-0:1.0";
+constexpr char kHost2StatePath[] = "/sys/bus/usb/devices/usb2/2-0:1.0/usb2-port1/state";
+constexpr char kDataRolePath[] = "/sys/devices/platform/11210000.usb/new_data_role";
 constexpr int kSamplingIntervalSec = 5;
 void queryVersionHelper(android::hardware::usb::Usb *usb,
                         std::vector<PortStatus> *currentPortStatus);
@@ -100,6 +114,7 @@ ScopedAStatus Usb::enableUsbData(const string& in_portName, bool in_enable,
         int64_t in_transactionId) {
     bool result = true;
     std::vector<PortStatus> currentPortStatus;
+    string displayPortPartnerPath;
 
     ALOGI("Userspace turn %s USB data signaling. opID:%ld", in_enable ? "on" : "off",
             in_transactionId);
@@ -114,6 +129,27 @@ ScopedAStatus Usb::enableUsbData(const string& in_portName, bool in_enable,
             if (!WriteStringToFile(kGadgetName, PULLUP_PATH)) {
                 ALOGE("Gadget cannot be pulled up");
                 result = false;
+            }
+
+            if (!WriteStringToFile("1", DISPLAYPORT_ACTIVE_PATH)) {
+                ALOGE("Failed to enable DisplayPort Alt Mode on port");
+            } else {
+                ALOGI("Successfully enabled DisplayPort Alt Mode on port");
+            }
+
+            if (getDisplayPortUsbPathHelper(&displayPortPartnerPath) == Status::SUCCESS) {
+                size_t pos = displayPortPartnerPath.find("/displayport");
+                if (pos != string::npos) {
+                    displayPortPartnerPath = displayPortPartnerPath.substr(0, pos) + "/mode1/active";
+                }
+                if (!WriteStringToFile("1", displayPortPartnerPath)) {
+                    ALOGE("Failed to enable DisplayPort Alt Mode on partner at %s",
+                            displayPortPartnerPath.c_str());
+                } else {
+                    ALOGI("Successfully enabled DisplayPort Alt Mode on partner at %s",
+                            displayPortPartnerPath.c_str());
+                    setupDisplayPortPoll();
+                }
             }
         }
     } else {
@@ -135,6 +171,27 @@ ScopedAStatus Usb::enableUsbData(const string& in_portName, bool in_enable,
         if (!WriteStringToFile("none", PULLUP_PATH)) {
             ALOGE("Gadget cannot be pulled down");
             result = false;
+        }
+
+        if (getDisplayPortUsbPathHelper(&displayPortPartnerPath) == Status::SUCCESS) {
+            size_t pos = displayPortPartnerPath.find("/displayport");
+            if (pos != string::npos) {
+                displayPortPartnerPath = displayPortPartnerPath.substr(0, pos) + "/mode1/active";
+            }
+            if (!WriteStringToFile("0", displayPortPartnerPath)) {
+                ALOGE("Failed to disable DisplayPort Alt Mode on partner at %s",
+                        displayPortPartnerPath.c_str());
+            } else {
+                ALOGI("Successfully disabled DisplayPort Alt Mode on partner at %s",
+                        displayPortPartnerPath.c_str());
+                shutdownDisplayPortPoll(true);
+            }
+        }
+
+        if (!WriteStringToFile("0", DISPLAYPORT_ACTIVE_PATH)) {
+            ALOGE("Failed to disable DisplayPort Alt Mode on port");
+        } else {
+            ALOGI("Successfully disabled DisplayPort Alt Mode on port");
         }
     }
 
@@ -307,9 +364,20 @@ Status queryNonCompliantChargerStatus(std::vector<PortStatus> *currentPortStatus
                     continue;
                 }
                 if (!strncmp(reason.c_str(), kComplianceWarningOther,
-                            strlen(kComplianceWarningOther))) {
-                    (*currentPortStatus)[i].complianceWarnings.push_back(ComplianceWarning::OTHER);
-                    continue;
+                             strlen(kComplianceWarningOther)) ||
+                    !strncmp(reason.c_str(), kComplianceWarningInputPowerLimited,
+                             strlen(kComplianceWarningInputPowerLimited))) {
+                    if (usb_flags::enable_usb_data_compliance_warning() &&
+                        usb_flags::enable_input_power_limited_warning()) {
+                        ALOGI("Report through INPUT_POWER_LIMITED warning");
+                        (*currentPortStatus)[i].complianceWarnings.push_back(
+                            ComplianceWarning::INPUT_POWER_LIMITED);
+                        continue;
+                    } else {
+                        (*currentPortStatus)[i].complianceWarnings.push_back(
+                            ComplianceWarning::OTHER);
+                        continue;
+                    }
                 }
             }
             if ((*currentPortStatus)[i].complianceWarnings.size() > 0 &&
@@ -442,11 +510,20 @@ bool switchMode(const string &portName, const PortRole &in_role, struct Usb *usb
     return roleSwitch;
 }
 
+void updatePortStatus(android::hardware::usb::Usb *usb) {
+    std::vector<PortStatus> currentPortStatus;
+
+    queryVersionHelper(usb, &currentPortStatus);
+}
+
 Usb::Usb()
     : mLock(PTHREAD_MUTEX_INITIALIZER),
       mRoleSwitchLock(PTHREAD_MUTEX_INITIALIZER),
       mPartnerLock(PTHREAD_MUTEX_INITIALIZER),
       mPartnerUp(false),
+      mUsbDataSessionMonitor(kUdcUeventRegex, kUdcStatePath, kHost1UeventRegex, kHost1StatePath,
+                             kHost2UeventRegex, kHost2StatePath, kDataRolePath,
+                             std::bind(&updatePortStatus, this)),
       mOverheat(ZoneInfo(TemperatureType::USB_PORT, kThermalZoneForTrip,
                          ThrottlingSeverity::CRITICAL),
                 {ZoneInfo(TemperatureType::UNKNOWN, kThermalZoneForTempReadPrimary,
@@ -489,6 +566,11 @@ Usb::Usb()
     mDisplayPortDebounceTimer = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK);
     if (mDisplayPortDebounceTimer == -1) {
         ALOGE("mDisplayPortDebounceTimer timerfd failed: %s", strerror(errno));
+        abort();
+    }
+    mDisplayPortActivateTimer = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK);
+    if (mDisplayPortActivateTimer == -1) {
+        ALOGE("mDisplayPortActivateTimer timerfd failed: %s", strerror(errno));
         abort();
     }
 }
@@ -916,6 +998,29 @@ AltModeData::DisplayPortAltModeData constructAltModeData(string hpd, string pin_
     return dpData;
 }
 
+Status queryPartnerSvids(std::vector<string> *svids) {
+    DIR *dp;
+
+    dp = opendir(kDisplayPortUsbPath);
+    if (dp != NULL) {
+        struct dirent *ep;
+        // Iterate through directories for Alt Mode SVIDs
+        while ((ep = readdir(dp))) {
+            if (ep->d_type == DT_DIR) {
+                string svid;
+                string portPartnerPath = string(kDisplayPortUsbPath) + string(ep->d_name) + "/svid";
+                if (ReadFileToString(portPartnerPath, &svid)) {
+                    (*svids).push_back(Trim(svid));
+                }
+            }
+        }
+        closedir(dp);
+    } else {
+        return Status::ERROR;
+    }
+    return Status::SUCCESS;
+}
+
 /* DisplayPort Helper Functions End */
 
 // Only care about first port which must support DisplayPortAltMode
@@ -925,21 +1030,47 @@ Status queryDisplayPortStatus(android::hardware::usb::Usb *usb,
     string path;
     AltModeData::DisplayPortAltModeData dpData;
 
+    /*
+    * We check if the DisplayPort Alt Mode sysfs nodes exist. If they don't, then it means that the
+    * device has not entered Alt Mode with the port partner because of a source/sink role
+    * incompatibility, pin assignment incompatibility, etc. So, we then check to see if the partner
+    * supports Thunderbolt and DisplayPort SVIDs. If it supports DisplayPort, then we assume that
+    * it must be a source device and Thunderbolt should operate similarly; we don't populate the
+    * DisplayPortAltModeStatus. If it only supports Thunderbolt, then we cannot determine if it is
+    * sink or source capable, and need to notify the user.
+    */
     if (usb->getDisplayPortUsbPathHelper(&path) == Status::ERROR) {
-        (*currentPortStatus)[0].supportedAltModes.push_back(dpData);
-        return Status::SUCCESS;
+        std::vector<string> svids;
+        if (queryPartnerSvids(&svids) == Status::SUCCESS) {
+            if (std::count(svids.begin(), svids.end(), SVID_THUNDERBOLT) &&
+                !std::count(svids.begin(), svids.end(), SVID_DISPLAYPORT)) {
+                dpData.cableStatus = DisplayPortAltModeStatus::NOT_CAPABLE;
+            }
+        }
+    } else {
+        usb->readDisplayPortAttribute("hpd", path, &hpd);
+        usb->readDisplayPortAttribute("pin_assignment", path, &pinAssign);
+        usb->readDisplayPortAttribute("vdo", path, &vdo);
+        usb->readDisplayPortAttribute("link_status", path, &linkStatus);
+
+        dpData = constructAltModeData(hpd, pinAssign, linkStatus, vdo);
     }
 
-    usb->readDisplayPortAttribute("hpd", path, &hpd);
-    usb->readDisplayPortAttribute("pin_assignment", path, &pinAssign);
-    usb->readDisplayPortAttribute("vdo", path, &vdo);
-    usb->readDisplayPortAttribute("link_status", path, &linkStatus);
-
-    // Set DisplayPortAltModeInfo
-    dpData = constructAltModeData(hpd, pinAssign, linkStatus, vdo);
     (*currentPortStatus)[0].supportedAltModes.push_back(dpData);
 
     return Status::SUCCESS;
+}
+
+void queryUsbDataSession(android::hardware::usb::Usb *usb,
+                          std::vector<PortStatus> *currentPortStatus) {
+    std::vector<ComplianceWarning> warnings;
+
+    usb->mUsbDataSessionMonitor.getComplianceWarnings(
+        (*currentPortStatus)[0].currentDataRole, &warnings);
+    (*currentPortStatus)[0].complianceWarnings.insert(
+        (*currentPortStatus)[0].complianceWarnings.end(),
+        warnings.begin(),
+        warnings.end());
 }
 
 void queryVersionHelper(android::hardware::usb::Usb *usb,
@@ -952,6 +1083,7 @@ void queryVersionHelper(android::hardware::usb::Usb *usb,
     queryMoistureDetectionStatus(currentPortStatus);
     queryPowerTransferStatus(currentPortStatus);
     queryNonCompliantChargerStatus(currentPortStatus);
+    queryUsbDataSession(usb, currentPortStatus);
     pthread_mutex_lock(&usb->mDisplayPortLock);
     if (!usb->mDisplayPortFirstSetupDone &&
         usb->getDisplayPortUsbPathHelper(&displayPortUsbPath) == Status::SUCCESS) {
@@ -1400,6 +1532,10 @@ static int displayPortPollOpenFileHelper(const char *file, int flags) {
     return fd;
 }
 
+/*
+ * armTimerFdHelper - Sets timerfd (fd) to trigger after (ms) milliseconds.
+ * Setting ms to 0 disarms the timer.
+ */
 static int armTimerFdHelper(int fd, int ms) {
     struct itimerspec ts;
 
@@ -1412,22 +1548,30 @@ static int armTimerFdHelper(int fd, int ms) {
 }
 
 void *displayPortPollWork(void *param) {
+    /* USB Payload */
+    ::aidl::android::hardware::usb::Usb *usb = (::aidl::android::hardware::usb::Usb *)param;
+    /* Epoll fields */
     int epoll_fd;
     struct epoll_event ev_hpd, ev_pin, ev_orientation, ev_eventfd, ev_link, ev_debounce;
+    struct epoll_event ev_activate;
     int nevents = 0;
     int hpd_fd, pin_fd, orientation_fd, link_training_status_fd;
     int file_flags = O_RDONLY;
     int epoll_flags;
+    /* DisplayPort link statuses */
     bool orientationSet = false;
     bool pinSet = false;
+    int activateRetryCount = 0;
     unsigned long res;
     int ret = 0;
+    /* File paths */
     string displayPortUsbPath, irqHpdCountPath, hpdPath, pinAssignmentPath, orientationPath;
-    string tcpcI2cBus, linkPath;
-    ::aidl::android::hardware::usb::Usb *usb = (::aidl::android::hardware::usb::Usb *)param;
+    string tcpcI2cBus, linkPath, partnerActivePath, portActivePath;
 
     usb->mDisplayPortPollRunning = true;
     usb->mDisplayPortPollStarting = false;
+
+    /*---------- Setup ----------*/
 
     if (usb->getDisplayPortUsbPathHelper(&displayPortUsbPath) == Status::ERROR) {
         ALOGE("usbdp: worker: could not locate usb displayport directory");
@@ -1439,6 +1583,9 @@ void *displayPortPollWork(void *param) {
     pinAssignmentPath = displayPortUsbPath + "pin_assignment";
     orientationPath = "/sys/class/typec/port0/orientation";
     linkPath = string(kDisplayPortDrmPath) + "link_status";
+
+    partnerActivePath = displayPortUsbPath + "../mode1/active";
+    portActivePath = "/sys/class/typec/port0/port0.0/mode1/active";
 
     getI2cBusHelper(&tcpcI2cBus);
     irqHpdCountPath = kI2CPath + tcpcI2cBus + "/" + tcpcI2cBus + kIrqHpdCounPath;
@@ -1472,12 +1619,15 @@ void *displayPortPollWork(void *param) {
     ev_eventfd.events = epoll_flags;
     ev_link.events = epoll_flags;
     ev_debounce.events = epoll_flags;
+    ev_activate.events = epoll_flags;
+
     ev_hpd.data.fd = hpd_fd;
     ev_pin.data.fd = pin_fd;
     ev_orientation.data.fd = orientation_fd;
     ev_eventfd.data.fd = usb->mDisplayPortEventPipe;
     ev_link.data.fd = link_training_status_fd;
     ev_debounce.data.fd = usb->mDisplayPortDebounceTimer;
+    ev_activate.data.fd = usb->mDisplayPortActivateTimer;
 
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, hpd_fd, &ev_hpd) == -1) {
         ALOGE("usbdp: worker: epoll_ctl failed to add hpd; errno=%d", errno);
@@ -1496,13 +1646,20 @@ void *displayPortPollWork(void *param) {
         goto error;
     }
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, usb->mDisplayPortDebounceTimer, &ev_debounce) == -1) {
-        ALOGE("usbdp: worker: epoll_ctl failed to add debounce; errno=%d", errno);
+        ALOGE("usbdp: worker: epoll_ctl failed to add framework update debounce; errno=%d", errno);
+        goto error;
+    }
+     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, usb->mDisplayPortActivateTimer, &ev_activate) == -1) {
+        ALOGE("usbdp: worker: epoll_ctl failed to add activate debounce; errno=%d", errno);
         goto error;
     }
     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, usb->mDisplayPortEventPipe, &ev_eventfd) == -1) {
         ALOGE("usbdp: worker: epoll_ctl failed to add orientation; errno=%d", errno);
         goto error;
     }
+
+    /* Arm timer to see if DisplayPort Alt Mode Activates */
+    armTimerFdHelper(usb->mDisplayPortActivateTimer, DISPLAYPORT_ACTIVATE_DEBOUNCE_MS);
 
     while (!destroyDisplayPortThread) {
         struct epoll_event events[64];
@@ -1553,6 +1710,33 @@ void *displayPortPollWork(void *param) {
                 if (ret < 0)
                     ALOGE("usbdp: debounce read errno:%d", errno);
                 queryVersionHelper(usb, &currentPortStatus);
+            } else if (events[n].data.fd == usb->mDisplayPortActivateTimer) {
+                string activePartner, activePort;
+
+                if (ReadFileToString(partnerActivePath.c_str(), &activePartner) &&
+                    ReadFileToString(portActivePath.c_str(), &activePort)) {
+                    // Retry activate signal when DisplayPort Alt Mode is active on port but not
+                    // partner.
+                    if (!strncmp(activePartner.c_str(), "no", strlen("no")) &&
+                        !strncmp(activePort.c_str(), "yes", strlen("yes")) &&
+                        activateRetryCount < DISPLAYPORT_ACTIVATE_MAX_RETRIES) {
+                        if (!WriteStringToFile("1", partnerActivePath)) {
+                            ALOGE("usbdp: Failed to activate port partner Alt Mode");
+                        } else {
+                            ALOGI("usbdp: Attempting to activate port partner Alt Mode");
+                        }
+                        activateRetryCount++;
+                        armTimerFdHelper(usb->mDisplayPortActivateTimer,
+                                         DISPLAYPORT_ACTIVATE_DEBOUNCE_MS);
+                    } else {
+                        ALOGI("usbdp: DisplayPort Alt Mode is active, or disabled on port");
+                    }
+                } else {
+                    activateRetryCount++;
+                    armTimerFdHelper(usb->mDisplayPortActivateTimer,
+                                     DISPLAYPORT_ACTIVATE_DEBOUNCE_MS);
+                    ALOGE("usbdp: Failed to read active state from port or partner");
+                }
             } else if (events[n].data.fd == usb->mDisplayPortEventPipe) {
                 uint64_t flag = 0;
                 if (!read(usb->mDisplayPortEventPipe, &flag, sizeof(flag))) {
@@ -1574,6 +1758,8 @@ void *displayPortPollWork(void *param) {
     }
 
 error:
+    /* Need to disarm so new threads don't get old event */
+    armTimerFdHelper(usb->mDisplayPortActivateTimer, 0);
     close(link_training_status_fd);
 link_training_status_fd_error:
     close(orientation_fd);
@@ -1583,6 +1769,7 @@ pin_fd_error:
     close(hpd_fd);
 hpd_fd_error:
     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, usb->mDisplayPortDebounceTimer, &ev_debounce);
+    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, usb->mDisplayPortActivateTimer, &ev_activate);
     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, usb->mDisplayPortEventPipe, &ev_eventfd);
     close(epoll_fd);
 epoll_fd_error:
