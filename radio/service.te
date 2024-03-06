@@ -1,0 +1,2 @@
+# dmd liboemservice_proxy
+type liboemservice_proxy, hal_service_type, service_manager_type;

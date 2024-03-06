@@ -1,2 +1,4 @@
 telephony.oem.oemrilhook        u:object_r:radio_service:s0
 
+# DMD oemservice aidl proxy
+com.google.pixel.modem.logmasklibrary.ILiboemserviceProxy/default                 u:object_r:liboemservice_proxy:s0

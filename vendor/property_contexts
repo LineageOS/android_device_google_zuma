@@ -4,7 +4,6 @@ vendor.camera.                             u:object_r:vendor_camera_prop:s0
 vendor.camera.fatp.                        u:object_r:vendor_camera_fatp_prop:s0
 
 # Fingerprint
-persist.vendor.fingerprint.                u:object_r:vendor_fingerprint_prop:s0
 vendor.fingerprint.                        u:object_r:vendor_fingerprint_prop:s0
 vendor.gf.                                 u:object_r:vendor_fingerprint_prop:s0
 
@@ -22,11 +21,8 @@ vendor.dynamic_sensor.                     u:object_r:vendor_dynamic_sensor_prop
 # Mali GPU driver configuration and debug options
 vendor.mali.                               u:object_r:vendor_arm_runtime_option_prop:s0 prefix
 
-# ArmNN configuration
-ro.vendor.armnn.                           u:object_r:vendor_armnn_config_prop:s0 prefix
-
-# Gxp
-vendor.gxp.                                u:object_r:vendor_gxp_prop:s0
-
 # Display
-persist.vendor.primarydisplay.             u:object_r:vendor_display_prop:s0 prefix
+persist.vendor.primarydisplay.                                 u:object_r:vendor_display_prop:s0 prefix
+ro.vendor.primarydisplay.vrr.enabled                           u:object_r:vendor_display_prop:s0 exact bool
+ro.vendor.primarydisplay.vrr.expected_present.headsup_ns       u:object_r:vendor_display_prop:s0 exact int
+ro.vendor.primarydisplay.vrr.expected_present.timeout_ns       u:object_r:vendor_display_prop:s0 exact int

@@ -1,7 +1,5 @@
 # Binaries
 /vendor/bin/hw/android\.hardware\.health-service\.zuma                      u:object_r:hal_health_default_exec:s0
-/vendor/bin/hw/android\.hardware\.boot-service\.default-zuma                u:object_r:hal_bootctl_default_exec:s0
-/vendor/bin/hw/android\.hardware\.gxp\.logging@service-gxp-logging          u:object_r:gxp_logging_exec:s0
 /vendor/bin/hw/android\.hardware\.power\.stats-service\.pixel               u:object_r:hal_power_stats_default_exec:s0
 /vendor/bin/hw/android\.hardware\.secure_element-service\.thales                    u:object_r:hal_secure_element_st54spi_aidl_exec:s0
 /vendor/bin/hw/android\.hardware\.biometrics\.fingerprint@2\.1-service\.goodix  u:object_r:hal_fingerprint_default_exec:s0
@@ -14,9 +12,8 @@
 /vendor/bin/hw/android\.hardware\.contexthub-service\.generic               u:object_r:hal_contexthub_default_exec:s0
 /vendor/bin/hw/google\.hardware\.media\.c2@2\.0-service                     u:object_r:mediacodec_google_exec:s0
 /vendor/bin/dump/dump_wlan\.sh                                              u:object_r:dump_wlan_exec:s0
-/vendor/bin/dump/dump_cma\.sh                                               u:object_r:dump_cma_exec:s0
 /vendor/bin/dump/dump_gsa\.sh                                               u:object_r:dump_gsa_exec:s0
-/vendor/bin/dump/dump_power\.sh                                             u:object_r:dump_power_exec:s0
+/vendor/bin/dump/dump_power                                                 u:object_r:dump_power_exec:s0
 /vendor/bin/rlsservice                                                      u:object_r:rlsservice_exec:s0
 /vendor/bin/tcpdump_logger                                                  u:object_r:tcpdump_logger_exec:s0
 /vendor/bin/storageproxyd                                                   u:object_r:tee_exec:s0
@@ -26,6 +23,7 @@
 /vendor/bin/init_uwb_calib                                                  u:object_r:vendor_uwb_init_exec:s0
 /vendor/bin/hw/android\.hardware\.security\.keymint-service\.trusty         u:object_r:hal_keymint_default_exec:s0
 /vendor/bin/hw/android\.hardware\.security\.keymint-service\.rust\.trusty         u:object_r:hal_keymint_default_exec:s0
+/vendor/bin/hw/android\.hardware\.security\.secretkeeper\.trusty            u:object_r:hal_secretkeeper_default_exec:s0
 /vendor/bin/ufs_firmware_update\.sh                                         u:object_r:ufs_firmware_update_exec:s0
 /vendor/bin/hw/android\.hardware\.memtrack-service\.pixel                   u:object_r:hal_memtrack_default_exec:s0
 /vendor/bin/hw/disable_contaminant_detection\.sh                            u:object_r:disable-contaminant-detection-sh_exec:s0
@@ -35,9 +33,10 @@
 /vendor/lib64/arm\.mali\.platform-V1-ndk\.so                                u:object_r:same_process_hal_file:s0
 /vendor/lib64/arm\.mali\.platform-V2-ndk\.so                                u:object_r:same_process_hal_file:s0
 
+# Gralloc
+/(vendor|system/vendor)/lib(64)?/hw/mapper\.pixel\.so                       u:object_r:same_process_hal_file:s0
+
 # Vendor libraries
-/vendor/lib(64)?/libgxp\.so                                                 u:object_r:same_process_hal_file:s0
-/vendor/lib(64)?/gxp_metrics_logger\.so                                     u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/lib_jpg_encoder\.so                                        u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libhwjpeg\.so                                              u:object_r:same_process_hal_file:s0
 

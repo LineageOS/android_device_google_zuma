@@ -3,7 +3,6 @@ type updated_wifi_firmware_data_file, file_type, data_file_type;
 type vendor_misc_data_file, file_type, data_file_type;
 type per_boot_file, file_type, data_file_type, core_data_file_type;
 type powerstats_vendor_data_file, file_type, data_file_type;
-type sensor_debug_data_file, file_type, data_file_type;
 
 # sysfs
 type bootdevice_sysdev, dev_type;

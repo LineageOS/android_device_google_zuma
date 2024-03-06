@@ -29,10 +29,6 @@ allow hal_camera_default persist_camera_file:file create_file_perms;
 allow hal_camera_default vendor_camera_data_file:dir rw_dir_perms;
 allow hal_camera_default vendor_camera_data_file:file create_file_perms;
 
-# Allow the camera hal to access the GXP device.
-allow hal_camera_default gxp_device:chr_file rw_file_perms;
-get_prop(hal_camera_default, vendor_gxp_prop)
-
 # Allow creating dump files for debugging in non-release builds
 userdebug_or_eng(`
   allow hal_camera_default vendor_camera_data_file:dir create_dir_perms;

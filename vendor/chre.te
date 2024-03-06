@@ -18,3 +18,7 @@ allow chre device:dir r_dir_perms;
 
 # Allow CHRE to use WakeLock
 wakelock_use(chre)
+
+# Allow CHRE host to talk to stats service
+allow chre fwk_stats_service:service_manager find;
+binder_call(chre, stats_service_server)

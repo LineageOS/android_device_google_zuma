@@ -2,3 +2,8 @@
 binder_call(twoshay, systemui_app)
 
 binder_call(twoshay, hal_radioext_default)
+
+# b/315347346
+# b/314721681
+unix_socket_connect(twoshay, chre, chre)
+allow twoshay self:capability2 block_suspend;

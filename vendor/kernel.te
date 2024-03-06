@@ -19,6 +19,8 @@ dontaudit kernel system_bootstrap_lib_file:file getattr;
 dontaudit kernel system_dlkm_file:dir getattr;
 dontaudit kernel vendor_battery_debugfs:dir search;
 dontaudit kernel vendor_charger_debugfs:dir search;
+dontaudit kernel vendor_votable_debugfs:dir search;
+dontaudit kernel vendor_usb_debugfs:dir search;
 
 allow kernel vendor_regmap_debugfs:dir search;
 

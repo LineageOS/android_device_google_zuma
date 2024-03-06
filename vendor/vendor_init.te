@@ -7,7 +7,6 @@ set_prop(vendor_init, logpersistd_logging_prop)
 
 allow vendor_init proc_dirty:file w_file_perms;
 allow vendor_init proc_sched:file w_file_perms;
-allow vendor_init sg_device:chr_file r_file_perms;
 allow vendor_init bootdevice_sysdev:file create_file_perms;
 allow vendor_init modem_img_file:filesystem { getattr };
 
@@ -29,16 +28,10 @@ set_prop(vendor_init, vendor_secure_element_prop)
 # USB property
 set_prop(vendor_init, vendor_usb_config_prop)
 
-set_prop(vendor_init, vendor_ssrdump_prop)
-
 # Mali
 set_prop(vendor_init, vendor_arm_runtime_option_prop)
-
-# ArmNN
-set_prop(vendor_init, vendor_armnn_config_prop)
+set_prop(vendor_init, vendor_ssrdump_prop)
 
 # MM
 allow vendor_init proc_watermark_scale_factor:file w_file_perms;
-
-# Gxp
-set_prop(vendor_init, vendor_gxp_prop)
+allow vendor_init proc_percpu_pagelist_high_fraction:file w_file_perms;

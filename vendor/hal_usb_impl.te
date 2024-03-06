@@ -8,6 +8,7 @@ hal_server_domain(hal_usb_impl, hal_usb_gadget)
 allow hal_usb_impl sysfs_batteryinfo:dir r_dir_perms;
 allow hal_usb_impl sysfs_batteryinfo:file rw_file_perms;
 allow hal_usb_impl dumpstate:fd use;
+get_prop(hal_usb_impl, vendor_usb_config_prop)
 
 # Needed for monitoring usb port temperature
 allow hal_usb_impl self:capability2 wake_alarm;
@@ -15,3 +16,10 @@ wakelock_use(hal_usb_impl);
 
 # For interfacing with ThermalHAL
 hal_client_domain(hal_usb_impl, hal_thermal);
+
+# For monitoring usb sysfs attributes
+allow hal_usb_impl sysfs_wakeup:dir search;
+allow hal_usb_impl sysfs_wakeup:file r_file_perms;
+
+# For metrics upload
+allow hal_usb_impl fwk_stats_service:service_manager find;
