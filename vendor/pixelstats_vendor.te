@@ -1,5 +1,6 @@
 # Battery history
 allow pixelstats_vendor battery_history_device:chr_file r_file_perms;
+allow pixelstats_vendor logbuffer_device:chr_file r_file_perms;
 
 # BCL
 allow pixelstats_vendor sysfs_bcl:dir search;
