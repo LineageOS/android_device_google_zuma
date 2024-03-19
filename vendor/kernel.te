@@ -8,19 +8,16 @@ allow kernel per_boot_file:file r_file_perms;
 allow kernel self:capability2 perfmon;
 allow kernel self:perf_event cpu;
 
-no_debugfs_restriction(`
+userdebug_or_eng(`
   allow kernel vendor_battery_debugfs:dir search;
+  allow kernel vendor_regmap_debugfs:dir search;
+  allow kernel vendor_usb_debugfs:dir search;
+  allow kernel vendor_votable_debugfs:dir search;
+  allow kernel vendor_charger_debugfs:dir search;
+  allow kernel vendor_maxfg_debugfs:dir search;
 ')
 
-dontaudit kernel vendor_maxfg_debugfs:dir search;
 dontaudit kernel sepolicy_file:file getattr;
 dontaudit kernel system_bootstrap_lib_file:dir getattr;
 dontaudit kernel system_bootstrap_lib_file:file getattr;
 dontaudit kernel system_dlkm_file:dir getattr;
-dontaudit kernel vendor_battery_debugfs:dir search;
-dontaudit kernel vendor_charger_debugfs:dir search;
-dontaudit kernel vendor_votable_debugfs:dir search;
-dontaudit kernel vendor_usb_debugfs:dir search;
-
-allow kernel vendor_regmap_debugfs:dir search;
-
