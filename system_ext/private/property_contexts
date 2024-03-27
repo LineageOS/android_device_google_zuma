@@ -1,4 +1,5 @@
 # Telephony
+telephony.TnNtn.image_switch u:object_r:telephony_modem_prop:s0    exact enum ntn tn
 telephony.ril.silent_reset    u:object_r:telephony_ril_prop:s0    exact    bool
 
 # HDCP setting of the display connected via USB port
