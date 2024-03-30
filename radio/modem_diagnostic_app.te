@@ -7,6 +7,8 @@ allow modem_diagnostic_app app_api_service:service_manager find;
 allow modem_diagnostic_app radio_service:service_manager find;
 
 userdebug_or_eng(`
+  allow modem_diagnostic_app sysfs_modem_state:file r_file_perms;
+
   hal_client_domain(modem_diagnostic_app, hal_power_stats);
 
   allow modem_diagnostic_app hal_exynos_rild_hwservice:hwservice_manager find;
