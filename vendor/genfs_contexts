@@ -243,11 +243,11 @@ genfscon sysfs /devices/platform/10cb0000.hsi2c/i2c-11/11-0069/power_supply/main
 genfscon sysfs /devices/platform/10cb0000.hsi2c/i2c-11/11-0069/wakeup/wakeup                                              u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/wakeup                                                        u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/wakeup                                 u:object_r:sysfs_wakeup:s0
-genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb1/wakeup                            u:object_r:sysfs_wakeup:s0
-genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb2/wakeup                            u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb1                                   u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb2                                   u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/wakeup                                 u:object_r:sysfs_wakeup:s0
-genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/usb1/wakeup                            u:object_r:sysfs_wakeup:s0
-genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/usb2/wakeup                            u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/usb1                                   u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/usb2                                   u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/13120000.pcie/pci0001:00/0001:00:00.0/0001:01:00.0/wakeup/wakeup                         u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/17000000.aoc/com.google.usf.non_wake_up/wakeup/wakeup                                    u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/17000000.aoc/com.google.usf/wakeup/wakeup                                                u:object_r:sysfs_wakeup:s0
