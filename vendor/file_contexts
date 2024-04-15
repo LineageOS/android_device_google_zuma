@@ -13,7 +13,6 @@
 /vendor/bin/dump/dump_wlan\.sh                                              u:object_r:dump_wlan_exec:s0
 /vendor/bin/dump/dump_gsa\.sh                                               u:object_r:dump_gsa_exec:s0
 /vendor/bin/dump/dump_power                                                 u:object_r:dump_power_exec:s0
-/vendor/bin/rlsservice                                                      u:object_r:rlsservice_exec:s0
 /vendor/bin/tcpdump_logger                                                  u:object_r:tcpdump_logger_exec:s0
 /vendor/bin/storageproxyd                                                   u:object_r:tee_exec:s0
 /vendor/bin/trusty_apploader                                                u:object_r:trusty_apploader_exec:s0
