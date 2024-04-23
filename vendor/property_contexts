@@ -28,3 +28,6 @@ ro.vendor.primarydisplay.xrr.version                           u:object_r:vendor
 ro.vendor.primarydisplay.blocking_zone.min_refresh_rate_by_nits u:object_r:vendor_display_prop:s0 exact string
 ro.vendor.primarydisplay.vrr.expected_present.headsup_ns       u:object_r:vendor_display_prop:s0 exact int
 ro.vendor.primarydisplay.vrr.expected_present.timeout_ns       u:object_r:vendor_display_prop:s0 exact int
+
+# For checking if persist partition is mounted
+ro.vendor.persist.status u:object_r:vendor_persist_prop:s0 exact string

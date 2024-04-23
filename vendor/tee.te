@@ -10,6 +10,11 @@ allow tee tee_data_file:lnk_file r_file_perms;
 allow tee tee_persist_block_device:blk_file rw_file_perms;
 allow tee block_device:dir search;
 
+
+# /mnt/vendor/persist/ss/0 sometimes gets labeled as persist_ss_file,
+# depending on the order of restorecon (b/336314247)
+allow tee persist_ss_file:lnk_file read;
+
 # Allow storageproxyd access to gsi_public_metadata_file
 read_fstab(tee)
 
