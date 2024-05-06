@@ -6,4 +6,6 @@ binder_call(twoshay, hal_radioext_default)
 # b/315347346
 # b/314721681
 unix_socket_connect(twoshay, chre, chre)
+# TODO(b/248615564): Remove above rule after CHRE multiclient HAL is launched.
+unix_socket_connect(twoshay, chre, hal_contexthub_default)
 allow twoshay self:capability2 block_suspend;

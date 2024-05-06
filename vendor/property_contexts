@@ -23,6 +23,7 @@ vendor.mali.                               u:object_r:vendor_arm_runtime_option_
 
 # Display
 persist.vendor.primarydisplay.                                 u:object_r:vendor_display_prop:s0 prefix
+ro.vendor.primarydisplay.preferred_mode                        u:object_r:vendor_display_prop:s0 exact string
 ro.vendor.primarydisplay.vrr.enabled                           u:object_r:vendor_display_prop:s0 exact bool
 ro.vendor.primarydisplay.vrr.expected_present.headsup_ns       u:object_r:vendor_display_prop:s0 exact int
 ro.vendor.primarydisplay.vrr.expected_present.timeout_ns       u:object_r:vendor_display_prop:s0 exact int

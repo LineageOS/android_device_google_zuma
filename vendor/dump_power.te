@@ -23,6 +23,7 @@ allow dump_power persist_battery_file:file r_file_perms;
 allow dump_power vendor_shell_exec:file execute_no_trans;
 allow dump_power battery_mitigation_exec:file execute_no_trans;
 allow dump_power sysfs_iio_devices:dir search;
+allow dump_power sysfs:dir r_dir_perms;
 
 userdebug_or_eng(`
   allow dump_power debugfs:dir r_dir_perms;

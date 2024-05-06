@@ -41,6 +41,7 @@ userdebug_or_eng(`
   dontaudit modem_diagnostic_app default_prop:file r_file_perms;
 
   # Modem Log Mask Library Permissions
-  binder_call(modem_diagnostic_app, liboemservice_proxy)
-  allow modem_diagnostic_app liboemservice_proxy:service_manager find;
+  allow modem_diagnostic_app liboemservice_proxy_service:service_manager find;
+  binder_use(modem_diagnostic_app)
+  binder_call(modem_diagnostic_app, liboemservice_proxy_default)
 ')

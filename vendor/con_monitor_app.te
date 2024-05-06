@@ -5,6 +5,8 @@ app_domain(con_monitor_app);
 allow con_monitor_app app_api_service:service_manager find;
 allow con_monitor_app batterystats_service:service_manager find;
 allow con_monitor_app virtual_device_service:service_manager find;
+allow con_monitor_app radio_vendor_data_file:dir rw_dir_perms;
+allow con_monitor_app radio_vendor_data_file:file create_file_perms;
 
 binder_call(con_monitor_app, system_server);
 binder_call(con_monitor_app, servicemanager);

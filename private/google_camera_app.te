@@ -14,3 +14,6 @@ hal_client_domain(google_camera_app, hal_power)
 
 # Library code may try to access vendor properties, but should be denied
 dontaudit google_camera_app vendor_default_prop:file { getattr map open };
+
+# Follow priv-app symlinks. This is used for dynamite functionality.
+allow google_camera_app privapp_data_file:lnk_file r_file_perms;

@@ -4,10 +4,7 @@ type custom_ab_block_device, dev_type;
 type mfg_data_block_device, dev_type;
 type ufs_internal_block_device, dev_type;
 type logbuffer_device, dev_type;
-type hw_jpg_device, dev_type;
-userdebug_or_eng(`
-  typeattribute hw_jpg_device mlstrustedobject;
-')
+type hw_jpg_device, dev_type, mlstrustedobject;
 type fingerprint_device, dev_type;
 type uci_device, dev_type;
 

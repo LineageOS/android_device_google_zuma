@@ -13,4 +13,6 @@ userdebug_or_eng(`
 
 	# Allows GCA_Eng & GCA-Next to access the PowerHAL.
 	hal_client_domain(debug_camera_app, hal_power)
+	# Follow priv-app symlinks. This is used for dynamite functionality.
+	allow debug_camera_app privapp_data_file:lnk_file r_file_perms;
 ')

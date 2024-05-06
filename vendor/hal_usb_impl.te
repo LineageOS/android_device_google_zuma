@@ -23,3 +23,6 @@ allow hal_usb_impl sysfs_wakeup:file r_file_perms;
 
 # For metrics upload
 allow hal_usb_impl fwk_stats_service:service_manager find;
+
+# For reading the usb-c throttling stats
+allow hal_usb_impl sysfs_usbc_throttling_stats:file r_file_perms;

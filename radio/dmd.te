@@ -30,9 +30,4 @@ binder_call(dmd, hwservicemanager)
 binder_call(dmd, modem_diagnostic_app)
 binder_call(dmd, modem_logging_control)
 binder_call(dmd, vendor_telephony_silentlogging_app)
-
-# Allow proxy to register as android Service
-binder_use(dmd)
-add_service(dmd, liboemservice_proxy)
-allow dmd radio_vendor_data_file:dir create_dir_perms;
-allow dmd radio_vendor_data_file:file create_file_perms;
+binder_call(dmd, liboemservice_proxy_default)

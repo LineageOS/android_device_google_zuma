@@ -1,0 +1,2 @@
+# DMD oemservice aidl proxy
+com.google.pixel.modem.logmasklibrary.ILiboemserviceProxy/default u:object_r:liboemservice_proxy_service:s0
