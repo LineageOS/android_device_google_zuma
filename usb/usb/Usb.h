@@ -156,6 +156,11 @@ struct Usb : public BnUsb {
      * eventfd to monitor whether a connection results in DisplayPort Alt Mode activating.
      */
     int mDisplayPortActivateTimer;
+    /*
+     * Indicates whether or not port partner supports DisplayPort, and is used to
+     * communicate to the drm when the port partner physically disconnects.
+     */
+    bool mPartnerSupportsDisplayPort;
 
   private:
     pthread_t mPoll;

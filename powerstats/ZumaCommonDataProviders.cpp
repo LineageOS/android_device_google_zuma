@@ -19,6 +19,7 @@
 #include <AocStateResidencyDataProvider.h>
 #include <CpupmStateResidencyDataProvider.h>
 #include <DevfreqStateResidencyDataProvider.h>
+#include <DisplayMrrStateResidencyDataProvider.h>
 #include <AdaptiveDvfsStateResidencyDataProvider.h>
 #include <TpuDvfsStateResidencyDataProvider.h>
 #include <UfsStateResidencyDataProvider.h>
@@ -39,6 +40,7 @@ using aidl::android::hardware::power::stats::AdaptiveDvfsStateResidencyDataProvi
 using aidl::android::hardware::power::stats::AocStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::CpupmStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::DevfreqStateResidencyDataProvider;
+using aidl::android::hardware::power::stats::DisplayMrrStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::DvfsStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::UfsStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::EnergyConsumerType;
@@ -646,6 +648,11 @@ void addPixelStateResidencyDataProvider(std::shared_ptr<PowerStats> p) {
     pixelSdp->start();
 
     p->addStateResidencyDataProvider(std::move(pixelSdp));
+}
+
+void addDisplayMRR(std::shared_ptr<PowerStats> p) {
+    p->addStateResidencyDataProvider(std::make_unique<DisplayMrrStateResidencyDataProvider>(
+            "Display", "/sys/class/drm/card0/device/primary-panel/"));
 }
 
 void addZumaCommonDataProviders(std::shared_ptr<PowerStats> p) {

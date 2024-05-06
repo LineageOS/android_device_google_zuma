@@ -121,30 +121,6 @@
         </interface>
     </hal>
     <hal format="aidl" optional="true">
-        <name>com.google.input.algos.spd</name>
-        <version>2</version>
-        <interface>
-            <name>IScreenProtectorDetectorService</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="aidl" optional="true">
-        <name>com.google.input</name>
-        <version>1-2</version>
-        <interface>
-            <name>ITouchContextService</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="aidl" optional="true">
-        <name>com.google.input.algos.gril</name>
-        <version>2</version>
-        <interface>
-            <name>IGrilAntennaTuningService</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="aidl" optional="true">
         <name>hardware.qorvo.uwb</name>
         <interface>
             <name>IUwbVendor</name>
@@ -195,6 +171,7 @@
     </hal>
     <hal format="aidl" optional="true">
         <name>com.google.pixel.modem.logmasklibrary</name>
+        <version>1</version>
         <interface>
             <name>ILiboemserviceProxy</name>
             <instance>default</instance>

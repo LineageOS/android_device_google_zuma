@@ -573,6 +573,11 @@ Usb::Usb()
         ALOGE("mDisplayPortActivateTimer timerfd failed: %s", strerror(errno));
         abort();
     }
+
+    ALOGI("feature flag enable_usb_data_compliance_warning: %d",
+          usb_flags::enable_usb_data_compliance_warning());
+    ALOGI("feature flag enable_input_power_limited_warning: %d",
+          usb_flags::enable_input_power_limited_warning());
 }
 
 ScopedAStatus Usb::switchRole(const string& in_portName, const PortRole& in_role,
@@ -1218,6 +1223,16 @@ static void uevent_event(uint32_t /*epevents*/, struct data *payload) {
             payload->usb->mPartnerUp = true;
             pthread_cond_signal(&payload->usb->mPartnerCV);
             pthread_mutex_unlock(&payload->usb->mPartnerLock);
+        } else if (std::regex_match(cp, std::regex("(remove)(.*)(-partner)"))) {
+            string drmDisconnectPath = string(kDisplayPortDrmPath) + "usbc_cable_disconnect";
+
+            if (payload->usb->mPartnerSupportsDisplayPort) {
+                ALOGI("displayport partner removed");
+                if (!WriteStringToFile("1", drmDisconnectPath)) {
+                    ALOGE("Failed to signal disconnect to drm");
+                }
+                payload->usb->mPartnerSupportsDisplayPort = false;
+            }
         } else if (!strncmp(cp, "DEVTYPE=typec_", strlen("DEVTYPE=typec_")) ||
                    !strncmp(cp, "DRIVER=max77759tcpc",
                             strlen("DRIVER=max77759tcpc")) ||
@@ -1383,6 +1398,8 @@ ScopedAStatus Usb::setCallback(const shared_ptr<IUsbCallback>& in_callback) {
     pthread_mutex_unlock(&mLock);
     return ScopedAStatus::ok();
 }
+
+/***** DisplayPort Alt Mode Helpers *****/
 
 Status Usb::getDisplayPortUsbPathHelper(string *path) {
     DIR *dp;
@@ -1800,6 +1817,7 @@ void Usb::setupDisplayPortPoll() {
     int ret;
 
     ALOGI("usbdp: setup: beginning setup for displayport poll thread");
+    mPartnerSupportsDisplayPort = true;
 
     /*
      * If thread is currently starting, then it hasn't setup DisplayPort fd's, and we can abandon
