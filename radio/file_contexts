@@ -12,6 +12,7 @@
 /vendor/bin/hw/rild_exynos                                                  u:object_r:rild_exec:s0
 /vendor/bin/hw/vendor\.google\.radioext@1\.0-service                        u:object_r:hal_radioext_default_exec:s0
 /vendor/bin/liboemservice_proxy_default                                     u:object_r:liboemservice_proxy_default_exec:s0
+/vendor/bin/copy_efs_files_to_data                                                            u:object_r:copy_efs_files_to_data_exec:s0
 
 # Config files
 /vendor/etc/modem_ml_models\.conf                                           u:object_r:modem_config_file:s0
@@ -23,6 +24,7 @@
 /data/vendor/modem_ml(/.*)?                                                 u:object_r:modem_ml_data_file:s0
 /data/vendor/modem_stat(/.*)?                                               u:object_r:modem_stat_data_file:s0
 /data/vendor/rild(/.*)?                                                     u:object_r:rild_vendor_data_file:s0
+/data/vendor/copied(/.*)?                                                     u:object_r:modem_efs_image_file:s0
 
 # vendor extra images
 /mnt/vendor/efs(/.*)?                                                       u:object_r:modem_efs_file:s0

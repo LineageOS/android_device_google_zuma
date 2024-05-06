@@ -1,5 +1,6 @@
 # Data
 type rild_vendor_data_file, file_type, data_file_type;
+type modem_efs_image_file, file_type, data_file_type;
 type vendor_gps_file, file_type, data_file_type;
 type modem_ml_data_file, file_type, data_file_type;
 type modem_stat_data_file, file_type, data_file_type;
