@@ -1,5 +1,4 @@
 import /vendor/etc/init/hw/init.zuma.usb.rc
-import /vendor/etc/init/hw/init.persist.rc
 import /vendor/etc/init/hw/init.efs.rc
 import android.hardware.drm@1.2-service.widevine.rc
 import init.exynos.sensorhub.rc
