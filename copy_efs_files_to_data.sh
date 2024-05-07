@@ -38,5 +38,3 @@ copy_files_to_data "/dev/block/by-name/efs" "/mnt/vendor/efs"
 copy_files_to_data "/dev/block/by-name/efs_backup" "/mnt/vendor/efs_backup"
 copy_files_to_data "/dev/block/by-name/modem_userdata" "/mnt/vendor/modem_userdata"
 
-chmod g+rx -R /mnt/vendor/persist
-copy_files_to_data "/dev/block/by-name/persist" "/mnt/vendor/persist"

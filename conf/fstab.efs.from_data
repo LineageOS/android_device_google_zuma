@@ -6,5 +6,3 @@
 /data/vendor/copied/efs_backup      /mnt/vendor/efs_backup      none    bind 	latemount
 
 /data/vendor/copied/modem_userdata  /mnt/vendor/modem_userdata  none    bind 	latemount
-
-/data/vendor/copied/persist  /mnt/vendor/persist none      bind 	latemount
