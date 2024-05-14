@@ -35,7 +35,10 @@ package {
 
 genrule {
     name: "gen_fstab.zuma-hw-encrypt",
-    srcs: ["fstab.zuma.in"],
+    srcs: [
+        "fstab.zuma.common",
+        "fstab.zuma.f2fs",
+    ],
     out: ["fstab.zuma"],
     cmd: "sed -e s/@fileencryption@/fileencryption=:aes-256-hctr2:inlinecrypt_optimized+wrappedkey_v0/" +
         " -e s/@inlinecrypt@/inlinecrypt/ " +
@@ -44,7 +47,10 @@ genrule {
 
 genrule {
     name: "gen_fstab.zuma-sw-encrypt",
-    srcs: ["fstab.zuma.in"],
+    srcs: [
+        "fstab.zuma.common",
+        "fstab.zuma.f2fs",
+    ],
     out: ["fstab.zuma"],
     cmd: "sed -e s/@fileencryption@/fileencryption=aes-256-xts:aes-256-hctr2/" +
         " -e s/@inlinecrypt@// " +
@@ -53,7 +59,10 @@ genrule {
 
 genrule {
     name: "gen_fstab.zuma-no-encrypt",
-    srcs: ["fstab.zuma.in"],
+    srcs: [
+        "fstab.zuma.common",
+        "fstab.zuma.f2fs",
+    ],
     out: ["fstab.zuma"],
     cmd: "sed -e s/@fileencryption@//" +
         " -e s/@inlinecrypt@// " +
@@ -62,7 +71,10 @@ genrule {
 
 genrule {
     name: "gen_fstab.zuma-fips",
-    srcs: ["fstab.zuma.in"],
+    srcs: [
+        "fstab.zuma.common",
+        "fstab.zuma.f2fs",
+    ],
     out: ["fstab.zuma-fips"],
     cmd: "sed -e s/@fileencryption@/fileencryption=aes-256-xts/" +
         " -e s/@inlinecrypt@/inlinecrypt/ " +
