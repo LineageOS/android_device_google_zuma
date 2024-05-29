@@ -41,3 +41,9 @@ allow hal_fingerprint_default sysfs_leds:dir r_dir_perms;
 # Allow fingerprint to access sysfs_aoc_udfps
 allow hal_fingerprint_default sysfs_aoc:dir search;
 allow hal_fingerprint_default sysfs_aoc_udfps:file rw_file_perms;
+
+# Allow fingerprint to read nsp file
+allow hal_fingerprint_default modem_efs_image_file:dir search;
+allow hal_fingerprint_default persist_file:dir search;
+allow hal_fingerprint_default persist_ss_file:dir search;
+allow hal_fingerprint_default persist_ss_file:file r_file_perms;
