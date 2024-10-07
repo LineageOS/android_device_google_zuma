@@ -1,0 +1,4 @@
+type modem_block_device, dev_type;
+type vendor_gnss_device, dev_type;
+type modem_userdata_block_device, dev_type;
+type efs_block_device, dev_type;

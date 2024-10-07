@@ -1,0 +1,14 @@
+# allow HWC to output to dumpstate via pipe fd
+dump_hal(hal_graphics_composer)
+
+dump_hal(hal_health)
+
+dump_hal(hal_telephony)
+
+dump_hal(hal_confirmationui)
+
+binder_call(dumpstate, hal_wireless_charger)
+
+dump_hal(hal_uwb)
+
+dontaudit dumpstate hal_power_stats_vendor_service:service_manager { find };

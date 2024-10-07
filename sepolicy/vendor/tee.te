@@ -1,0 +1,21 @@
+# Handle wake locks
+wakelock_use(tee)
+
+allow tee persist_ss_file:file create_file_perms;
+allow tee persist_ss_file:dir create_dir_perms;
+allow tee persist_file:dir r_dir_perms;
+allow tee mnt_vendor_file:dir r_dir_perms;
+allow tee tee_data_file:dir rw_dir_perms;
+allow tee tee_data_file:lnk_file r_file_perms;
+allow tee tee_persist_block_device:blk_file rw_file_perms;
+allow tee block_device:dir search;
+
+
+# /mnt/vendor/persist/ss/0 sometimes gets labeled as persist_ss_file,
+# depending on the order of restorecon (b/336314247)
+allow tee persist_ss_file:lnk_file read;
+
+# Allow storageproxyd access to gsi_public_metadata_file
+read_fstab(tee)
+
+set_prop(tee, vendor_trusty_storage_prop)

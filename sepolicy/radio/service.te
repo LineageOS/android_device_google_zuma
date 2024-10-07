@@ -1,0 +1,2 @@
+# define liboemservice_proxy_service
+type liboemservice_proxy_service, hal_service_type, service_manager_type;

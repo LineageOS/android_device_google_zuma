@@ -1,0 +1,12 @@
+# Domain for EuiccSupportPixel
+user=_app isPrivApp=true seinfo=EuiccSupportPixel name=com.google.euiccpixel domain=euiccpixel_app type=app_data_file levelFrom=all
+
+# Domain for connectivity monitor
+user=_app isPrivApp=true seinfo=platform name=com.google.android.connectivitymonitor domain=con_monitor_app type=app_data_file levelFrom=all
+
+# Qorvo UWB system app
+# TODO(b/222204912): Should this run under uwb user?
+user=_app isPrivApp=true seinfo=uwb name=com.qorvo.uwb.vendorservice domain=uwb_vendor_app type=uwb_vendor_data_file levelFrom=all
+
+# CccDkTimeSyncService
+user=_app isPrivApp=true name=com.google.pixel.digitalkey.timesync domain=vendor_cccdktimesync_app type=app_data_file levelFrom=all

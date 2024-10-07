@@ -1,0 +1,19 @@
+type persist_block_device, dev_type;
+type tee_persist_block_device, dev_type;
+type custom_ab_block_device, dev_type;
+type mfg_data_block_device, dev_type;
+type ufs_internal_block_device, dev_type;
+type logbuffer_device, dev_type;
+type hw_jpg_device, dev_type, mlstrustedobject;
+type fingerprint_device, dev_type;
+type uci_device, dev_type;
+
+# Dmabuf heaps
+type sensor_direct_heap_device, dmabuf_heap_device_type, dev_type;
+type faceauth_heap_device, dmabuf_heap_device_type, dev_type;
+type vscaler_secure_heap_device, dmabuf_heap_device_type, dev_type;
+type framebuffer_secure_heap_device, dmabuf_heap_device_type, dev_type;
+type gcma_camera_heap_device, dmabuf_heap_device_type, dev_type;
+
+# SecureElement SPI device
+type st54spi_device, dev_type;

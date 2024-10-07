@@ -1,0 +1,4 @@
+allow init modem_efs_file:dir mounton;
+allow init modem_userdata_file:dir mounton;
+allow init modem_img_file:dir mounton;
+allow init modem_img_file:filesystem { getattr mount relabelfrom };

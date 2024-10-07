@@ -1,0 +1,33 @@
+# Camera
+persist.vendor.camera.                     u:object_r:vendor_camera_prop:s0
+vendor.camera.                             u:object_r:vendor_camera_prop:s0
+vendor.camera.fatp.                        u:object_r:vendor_camera_fatp_prop:s0
+
+# Fingerprint
+vendor.fingerprint.                        u:object_r:vendor_fingerprint_prop:s0
+vendor.gf.                                 u:object_r:vendor_fingerprint_prop:s0
+
+# Battery
+vendor.battery.defender.                   u:object_r:vendor_battery_defender_prop:s0
+persist.vendor.shutdown.                   u:object_r:vendor_shutdown_prop:s0
+
+# USB
+persist.vendor.usb.                        u:object_r:vendor_usb_config_prop:s0
+vendor.usb.                                u:object_r:vendor_usb_config_prop:s0
+
+# Dynamic sensor
+vendor.dynamic_sensor.                     u:object_r:vendor_dynamic_sensor_prop:s0
+
+# Mali GPU driver configuration and debug options
+vendor.mali.                               u:object_r:vendor_arm_runtime_option_prop:s0 prefix
+
+# Display
+persist.vendor.primarydisplay.                                 u:object_r:vendor_display_prop:s0 prefix
+ro.vendor.primarydisplay.preferred_mode                        u:object_r:vendor_display_prop:s0 exact string
+ro.vendor.primarydisplay.xrr.version                           u:object_r:vendor_display_prop:s0 exact string
+ro.vendor.primarydisplay.blocking_zone.min_refresh_rate_by_nits u:object_r:vendor_display_prop:s0 exact string
+ro.vendor.primarydisplay.vrr.expected_present.headsup_ns       u:object_r:vendor_display_prop:s0 exact int
+ro.vendor.primarydisplay.vrr.expected_present.timeout_ns       u:object_r:vendor_display_prop:s0 exact int
+
+# For checking if persist partition is mounted
+ro.vendor.persist.status u:object_r:vendor_persist_prop:s0 exact string
