@@ -618,4 +618,7 @@
     <string-array name="config_biometric_protected_package_names">
         <item>com.google.android.crossdeviceaccessservice</item>
     </string-array>
+
+    <!-- Whether to enable fp unlock when screen turns off on udfps devices -->
+    <bool name="config_screen_off_udfps_enabled">true</bool>
 </resources>
