@@ -25,5 +25,5 @@ allow hal_radioext_default hal_bluetooth_coexistence_service:service_manager fin
 # Twoshay
 binder_use(hal_radioext_default)
 allow hal_radioext_default gril_antenna_tuning_service:service_manager find;
-binder_call(hal_radioext_default, gril_antenna_tuning_service)
+#binder_call(hal_radioext_default, gril_antenna_tuning_service)
 binder_call(hal_radioext_default, twoshay)
