@@ -216,20 +216,8 @@ PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 DEVICE_MANIFEST_FILE := \
 	device/google/zuma/manifest.xml
 
-ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
-DEVICE_MANIFEST_FILE += \
-	device/google/zuma/manifest_media_aosp.xml
-
-PRODUCT_COPY_FILES += \
-	device/google/zuma/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml
-else
 DEVICE_MANIFEST_FILE += \
 	device/google/zuma/manifest_media.xml
-
-PRODUCT_COPY_FILES += \
-	device/google/zuma/media_codecs_bo_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml \
-	device/google/zuma/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_aosp_c2.xml
-endif
 
 DEVICE_MATRIX_FILE := \
 	device/google/zuma/compatibility_matrix.xml
@@ -244,14 +232,6 @@ PRODUCT_PRODUCT_VNDK_VERSION := current
 PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
 
 # Init files
-PRODUCT_COPY_FILES += \
-	device/google/zuma/conf/init.zuma.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.zuma.usb.rc \
-	device/google/zuma/conf/ueventd.zuma.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
-
-PRODUCT_COPY_FILES += \
-	device/google/zuma/conf/init.zuma.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.zuma.rc \
-	device/google/zuma/conf/init.persist.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.persist.rc
-
 ifeq (true,$(filter $(TARGET_BOOTS_16K) $(PRODUCT_16K_DEVELOPER_OPTION),true))
 PRODUCT_COPY_FILES += \
 	device/google/zuma/conf/init.efs.16k.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.efs.rc \
@@ -263,21 +243,13 @@ PRODUCT_COPY_FILES += \
 	device/google/zuma/conf/init.efs.4k.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.efs.rc
 endif
 
-PRODUCT_COPY_FILES += \
-	device/google/zuma/storage/6.1/init.zuma.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.zuma.storage.rc
-
 # Recovery files
 PRODUCT_COPY_FILES += \
 	device/google/zuma/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.zuma.rc
 
 # Fstab files
-ifeq (ext4,$(TARGET_RW_FILE_SYSTEM_TYPE))
-PRODUCT_SOONG_NAMESPACES += \
-        device/google/zuma/conf/ext4
-else
 PRODUCT_SOONG_NAMESPACES += \
         device/google/zuma/conf/f2fs
-endif
 
 PRODUCT_PACKAGES += \
 	fstab.zuma \
@@ -285,15 +257,7 @@ PRODUCT_PACKAGES += \
 	fstab.zuma-fips \
 	fstab.zuma-fips.vendor_ramdisk
 
-PRODUCT_COPY_FILES += \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.modem:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.modem \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.efs:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.efs
-
 # Shell scripts
-PRODUCT_PACKAGES += \
-	disable_contaminant_detection.sh
-
 include device/google/gs-common/insmod/insmod.mk
 
 # Insmod config files
@@ -382,9 +346,6 @@ PRODUCT_COPY_FILES += \
 # adpf 16ms update rate
 PRODUCT_PRODUCT_PROPERTIES += \
         vendor.powerhal.adpf.rate=16666666
-
-PRODUCT_COPY_FILES += \
-	device/google/zuma/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
 
@@ -530,8 +491,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.display_update_imminent
 
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.sf.native_mode=2
-PRODUCT_COPY_FILES += \
-	device/google/zuma/display/display_colordata_cal0.pb:$(TARGET_COPY_OUT_VENDOR)/etc/display_colordata_cal0.pb
 
 # limit DPP downscale ratio
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += vendor.hwc.dpp.downscale=4
@@ -543,10 +502,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vendor.ddk.set.afbc=1
 
 PRODUCT_CHARACTERISTICS := nosdcard
-
-# WIFI COEX
-PRODUCT_COPY_FILES += \
-	device/google/zuma/wifi/coex_table.xml:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/coex_table.xml
 
 PRODUCT_PACKAGES += hostapd
 PRODUCT_PACKAGES += wpa_supplicant
@@ -573,9 +528,6 @@ include device/google/gs-common/mediacodec/common/mediacodec_common.mk
 # for Exynos C2 Hal
 include device/google/gs-common/mediacodec/samsung/mediacodec_samsung.mk
 
-PRODUCT_COPY_FILES += \
-	device/google/zuma/media_codecs_performance_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance_c2.xml \
-
 PRODUCT_PROPERTY_OVERRIDES += \
        debug.c2.use_dmabufheaps=1 \
        media.c2.dmabuf.padding=512 \
@@ -590,11 +542,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	debug.stagefright.c2inputsurface=-1 \
 
 PRODUCT_PROPERTY_OVERRIDES += media.c2.hal.selection=aidl
-
-# 2. OpenMAX IL
-PRODUCT_COPY_FILES += \
-	device/google/zuma/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
-	device/google/zuma/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
 
 # setup dalvik vm configs.
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
@@ -680,47 +627,11 @@ include device/google/gs-common/modem/modem_svc_sit/shared_modem_platform.mk
 # modem_ml_svc_sit daemon
 PRODUCT_PACKAGES += modem_ml_svc_sit
 
-# modem ML models configs
-PRODUCT_COPY_FILES += \
-	device/google/zuma/modem_ml/modem_ml_models_user.conf:$(TARGET_COPY_OUT_VENDOR)/etc/modem_ml_models.conf
-
 # modem logging binary/configs
 PRODUCT_PACKAGES += modem_logging_control
 
 # libeomservice_proxy binary/configs
 PRODUCT_PACKAGES += liboemservice_proxy_default
-
-# PILOT SCENARIOS
-PRODUCT_PACKAGES += \
-	Pixel_stability.cfg \
-	Pixel_stability.nprf
-
-# Default modem log mask for pixel logger
-PRODUCT_PACKAGES += \
-	logging.conf \
-	default.cfg \
-	default.nprf \
-	default_metrics.xml \
-	extensive_logging.conf
-
-# Log Masks for logmasklibrary below
-# default modem log mask
-PRODUCT_PACKAGES += \
-	default_modem_log_mask.conf \
-	default_modem_log_mask.cfg \
-	default_modem_log_mask.nprf \
-	default_modem_log_mask.xml
-
-# Empty modem log mask
-PRODUCT_PACKAGES += \
-	empty_modem_log_mask.conf \
-	empty_modem_log_mask.cfg \
-	empty_modem_log_mask.nprf \
-	empty_modem_log_mask.xml
-
-# Lassen default log mask
-PRODUCT_PACKAGES += \
-	lassen_default.conf
 
 PRODUCT_PACKAGES += \
 	android.hardware.health-service.zuma \
@@ -836,9 +747,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk
 
 # RIL extension service
-ifeq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 include device/google/gs-common/pixel_ril/ril.mk
-endif
 
 # Touch service
 include device/google/gs-common/touch/twoshay/aidl_zuma.mk
