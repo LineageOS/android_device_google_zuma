@@ -5,17 +5,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Voice packs for Text-To-Speech
-PRODUCT_COPY_FILES += \
-    device/google/gs-common/tts/ja-jp/ja-jp-x-multi-r55.zvoice:$(TARGET_COPY_OUT_PRODUCT)/tts/google/ja-jp/ja-jp-x-multi-r55.zvoice \
-    device/google/gs-common/tts/fr-fr/fr-fr-x-multi-r57.zvoice:$(TARGET_COPY_OUT_PRODUCT)/tts/google/fr-fr/fr-fr-x-multi-r57.zvoice \
-    device/google/gs-common/tts/de-de/de-de-x-multi-r57.zvoice:$(TARGET_COPY_OUT_PRODUCT)/tts/google/de-de/de-de-x-multi-r57.zvoice \
-    device/google/gs-common/tts/it-it/it-it-x-multi-r54.zvoice:$(TARGET_COPY_OUT_PRODUCT)/tts/google/it-it/it-it-x-multi-r54.zvoice \
-    device/google/gs-common/tts/es-es/es-es-x-multi-r56.zvoice:$(TARGET_COPY_OUT_PRODUCT)/tts/google/es-es/es-es-x-multi-r56.zvoice
-
-PRODUCT_SOONG_NAMESPACES += \
-    device/google/gs-common/powerstats
-
 # Disable OMX
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.media.omx=0
@@ -29,96 +18,36 @@ PRODUCT_COPY_FILES += \
 DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
     device/google/gs-common/vintf/framework_compatibility_matrix.xml
 
-# Platform watchdogd
-PRODUCT_PACKAGES += gs_watchdogd
-PRODUCT_SOONG_NAMESPACES += \
-    device/google/gs-common/gs_watchdogd
-
 # sscoredump
 PRODUCT_PROPERTY_OVERRIDES += vendor.debug.ssrdump.type=sscoredump
 
-# SoC
-PRODUCT_PACKAGES += dump_soc
-
 # Modem
 PRODUCT_PACKAGES += dump_modem
-PRODUCT_PACKAGES += dump_modemlog
-
-# AoC
-PRODUCT_PACKAGES += dump_aoc
-
-# If AoC Daemon is not present on this build, load firmware at boot via rc
-PRODUCT_COPY_FILES += \
-    device/google/gs-common/aoc/conf/init.aoc.daemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.aoc.rc
-
-# Trusty
-PRODUCT_PACKAGES += dump_trusty.sh
-
-# PCI express
-PRODUCT_PACKAGES += dump_pcie.sh
-
-# Storage
-PRODUCT_PACKAGES += dump_storage
 
 # Thermal
-PRODUCT_PACKAGES += dump_thermal.sh
-
 PRODUCT_PACKAGES += android.hardware.thermal-service.pixel
 
 # Thermal utils
 PRODUCT_PACKAGES += thermal_symlinks
 
-# Performance
-PRODUCT_PACKAGES += dump_perf
-
 # Ensure enough free space to create zram backing device
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.zram_backing_device_min_free_mb=1536
 
-#include device/google/gs-common/power/power.mk
-PRODUCT_PACKAGES += init.power-gs.rc
-
-#include device/google/gs-common/pixel_metrics/pixel_metrics.mk
-PRODUCT_PACKAGES += dump_pixel_metrics
-
-#include device/google/gs-common/soc/freq.mk
-PRODUCT_PACKAGES += dump_devfreq
-
-#include device/google/gs-common/display/dump_exynos_display.mk
-PRODUCT_PACKAGES += dump_exynos_display
-
-#include device/google/gs-common/display_logbuffer/dump.mk
-PRODUCT_PACKAGES += dump_display_logbuffer
-
-#include device/google/gs-common/gear/dumpstate/aidl.mk
-PRODUCT_PACKAGES += android.hardware.dumpstate-service
-
-#include device/google/gs-common/widevine/widevine.mk
+# DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey
 
-#include device/google/gs-common/misc_writer/misc_writer.mk
+# misc_writer
 PRODUCT_PACKAGES += \
     misc_writer
 
-#include device/google/gs-common/bootctrl/bootctrl_aidl.mk
+# Boot control
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.default-pixel \
     android.hardware.boot-service.default_recovery-pixel
 
 PRODUCT_SOONG_NAMESPACES += device/google/gs-common/bootctrl/aidl
-
-#include device/google/gs-common/fingerprint/fingerprint.mk
-PRODUCT_PACKAGES += dump_fingerprint
-
-#include device/google/gs-common/16kb/16kb.mk
-PRODUCT_PACKAGES += copy_efs_files_to_data
-
-# Add UmfwStat product packages.
-PRODUCT_PACKAGES += dump_umfw_stat
-PRODUCT_PACKAGES += umfw_stat_tool
-
-PRODUCT_PACKAGES += dump_power
 
 TARGET_BOARD_PLATFORM := zuma
 
@@ -138,8 +67,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/interfaces \
 	hardware/google/pixel \
-	device/google/zuma \
-	device/google/zuma/powerstats
+	device/google/zuma
 
 # Set the environment variable to switch the Keymint HAL service to Rust
 TRUSTY_KEYMINT_IMPL := rust
@@ -242,7 +170,7 @@ DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs-common/modem/modem_
 # HWUI
 TARGET_USES_VULKAN = true
 
-#include device/google/gs-common/gpu/gpu.mk
+# GPU
 PRODUCT_PACKAGES += gpu_probe
 
 # Install the OpenCL ICD Loader
@@ -327,11 +255,6 @@ PRODUCT_PACKAGES += \
 	fstab.zuma.vendor_ramdisk \
 	fstab.zuma-fips \
 	fstab.zuma-fips.vendor_ramdisk
-
-# Shell scripts
-PRODUCT_PACKAGES += \
-    insmod.sh \
-    init.common.cfg
 
 # Insmod config files
 PRODUCT_COPY_FILES += \
@@ -427,16 +350,9 @@ PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
 # Set util_clamp_min for s/w spatializer
 PRODUCT_PROPERTY_OVERRIDES += audio.spatializer.effect.util_clamp_min=300
 
-#include device/google/gs-common/camera/lyric.mk
+# Camera
 PRODUCT_SOONG_NAMESPACES += \
     hardware/google/camera
-
-# Init-time log settings for Google 3A
-PRODUCT_PACKAGES += libg3a_standalone_gabc_rc
-PRODUCT_PACKAGES += libg3a_standalone_gaf_rc
-PRODUCT_PACKAGES += libg3a_standalone_ghawb_rc
-
-PRODUCT_PACKAGES += lyric_preview_dis_xml
 
 DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
     device/google/gs-common/camera/device_framework_matrix_product.xml
@@ -620,8 +536,6 @@ PRODUCT_PACKAGES += \
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-PRODUCT_PACKAGES += dump_sensors
-
 PRODUCT_COPY_FILES += \
 	device/google/zuma/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
 	device/google/zuma/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml \
@@ -768,9 +682,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # EUICC
 PRODUCT_PACKAGES += \
     EuiccSupportPixelOverlay
-
-# Experiments
-PRODUCT_PACKAGES += pixel-experiments-recovery.sh
 
 # Google Assistant
 PRODUCT_PRODUCT_PROPERTIES += ro.opa.eligible_device=true
