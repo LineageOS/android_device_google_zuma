@@ -1,2 +1,1 @@
-# wlc
 dontaudit shell sysfs_wlc:dir search;
