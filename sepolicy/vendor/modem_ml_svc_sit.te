@@ -1,0 +1,18 @@
+type modem_ml_svc_sit, domain;
+type modem_ml_svc_sit_exec, exec_type, file_type, vendor_file_type;
+
+hal_client_domain(modem_ml_svc_sit, hal_neuralnetworks)
+
+binder_use(modem_ml_svc_sit)
+
+get_prop(modem_ml_svc_sit, vendor_rild_prop)
+
+init_daemon_domain(modem_ml_svc_sit)
+
+allow modem_ml_svc_sit edgetpu_nnapi_service:service_manager find;
+allow modem_ml_svc_sit modem_config_file:file r_file_perms;
+allow modem_ml_svc_sit modem_ml_data_file:dir create_dir_perms;
+allow modem_ml_svc_sit modem_ml_data_file:file create_file_perms;
+allow modem_ml_svc_sit radio_device:chr_file rw_file_perms;
+allow modem_ml_svc_sit radio_vendor_data_file:dir create_dir_perms;
+allow modem_ml_svc_sit radio_vendor_data_file:file create_file_perms;
