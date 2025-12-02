@@ -1,4 +1,0 @@
-# radio
-type modem_block_device, dev_type;
-type vendor_gnss_device, dev_type;
-
