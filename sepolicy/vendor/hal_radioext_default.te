@@ -1,1 +1,0 @@
-allow hal_radioext_default sysfs_display:file rw_file_perms;

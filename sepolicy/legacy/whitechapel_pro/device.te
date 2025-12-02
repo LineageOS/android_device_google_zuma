@@ -1,3 +1,0 @@
-type vendor_toe_device, dev_type;
-type lwis_device, dev_type;
-type rls_device, dev_type;
