@@ -15,9 +15,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.ipsec_tunnel_migration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnel_migration.xml
 
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
-    device/google/gs-common/vintf/framework_compatibility_matrix.xml
-
 # sscoredump
 PRODUCT_PROPERTY_OVERRIDES += vendor.debug.ssrdump.type=sscoredump
 
@@ -164,9 +161,6 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.modem.extensive_logging_enabled=false
 
-# Shared Modem Platform
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs-common/modem/modem_svc_sit/compatibility_matrix.xml
-
 # HWUI
 TARGET_USES_VULKAN = true
 
@@ -209,16 +203,6 @@ PRODUCT_VENDOR_PROPERTIES += \
 
 # b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
 PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
-
-# Device Manifest, Device Compatibility Matrix for Treble
-DEVICE_MANIFEST_FILE := \
-	device/google/zuma/manifest.xml
-
-DEVICE_MANIFEST_FILE += \
-	device/google/zuma/manifest_media.xml
-
-DEVICE_MATRIX_FILE := \
-	device/google/zuma/compatibility_matrix.xml
 
 DEVICE_PACKAGE_OVERLAYS += device/google/zuma/overlay
 DEVICE_PACKAGE_OVERLAYS += device/google/zuma/overlay-lineage
@@ -354,12 +338,6 @@ PRODUCT_PROPERTY_OVERRIDES += audio.spatializer.effect.util_clamp_min=300
 PRODUCT_SOONG_NAMESPACES += \
     hardware/google/camera
 
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
-    device/google/gs-common/camera/device_framework_matrix_product.xml
-
-DEVICE_MATRIX_FILE += \
-    device/google/gs-common/camera/compatibility_matrix.xml
-
 # Connectivity
 PRODUCT_PACKAGES += \
         ConnectivityOverlay
@@ -371,8 +349,6 @@ PRODUCT_PACKAGES += \
 # Battery Mitigation
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.battery_mitigation.aidl.enable=true
-
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs-common/battery_mitigation/compatibility_matrix.xml
 
 # storage pixelstats
 -include hardware/google/pixel/pixelstats/device.mk
@@ -545,9 +521,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.health-service.zuma \
 	android.hardware.health-service.zuma_recovery \
 
-# Audio HAL Server & Default Implementations
-DEVICE_MANIFEST_FILE += device/google/gs-common/audio/aidl/manifest.xml
-
+# Audio
 PRODUCT_PACKAGES += \
     libvisualizeraidl \
     libbundleaidl \
@@ -556,8 +530,6 @@ PRODUCT_PACKAGES += \
     libloudnessenhanceraidl \
     libdownmixaidl \
     libhapticgeneratoraidl
-
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs-common/audio/aidl/device_framework_matrix_product.xml
 
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.audio_hal.aidl.enable=true
@@ -636,11 +608,6 @@ include hardware/google/pixel/common/pixel-common-device.mk
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
 
-# Install product specific framework compatibility matrix
-# (TODO: b/169535506) This includes the FCM for system_ext and product partition.
-# It must be split into the FCM of each partition.
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/zuma/device_framework_matrix_product.xml
-
 # Keymint configuration
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.device_id_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_id_attestation.xml \
@@ -655,14 +622,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Hardware Info Collection
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk
-
-# RIL extension service
-DEVICE_MANIFEST_FILE += device/google/gs-common/pixel_ril/manifest_ril_ds.xml
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs-common/pixel_ril/compatibility_matrix.xml
-
-# Touch service
-DEVICE_MANIFEST_FILE += device/google/gs-common/touch/twoshay/aidl/manifest_zuma.xml
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs-common/touch/twoshay/aidl/compatibility_matrix_zuma.xml
 
 # Allow longer timeout for incident report generation in bugreport
 # Overriding in /product partition instead of /vendor intentionally,
@@ -707,3 +666,13 @@ PRODUCT_PACKAGES += \
 
 # Touch
 include hardware/google/pixel/touch/device.mk
+
+# VINTF
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
+    device/google/zuma/vintf/vendor_framework_compatibility_matrix.xml
+DEVICE_MANIFEST_FILE += \
+    device/google/zuma/vintf/manifest.xml
+DEVICE_MATRIX_FILE += \
+    device/google/zuma/vintf/compatibility_matrix.xml
+DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
+    device/google/zuma/vintf/device_framework_matrix_product.xml
