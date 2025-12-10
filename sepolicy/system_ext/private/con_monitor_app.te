@@ -1,0 +1,12 @@
+app_domain(con_monitor_app)
+
+typeattribute con_monitor_app coredomain;
+
+binder_call(con_monitor_app, servicemanager)
+binder_call(con_monitor_app, system_server)
+
+set_prop(con_monitor_app, radio_prop)
+
+allow con_monitor_app app_api_service:service_manager find;
+allow con_monitor_app batterystats_service:service_manager find;
+allow con_monitor_app virtual_device_service:service_manager find;
