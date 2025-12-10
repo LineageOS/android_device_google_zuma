@@ -1,0 +1,6 @@
+app_domain(rilextensionservice_app)
+
+set_prop(rilextensionservice_app, radio_prop)
+
+allow rilextensionservice_app app_api_service:service_manager find;
+allow rilextensionservice_app radio_service:service_manager find;

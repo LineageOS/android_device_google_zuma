@@ -30,6 +30,7 @@
 /data/vendor/radio(/.*)? u:object_r:radio_vendor_data_file:s0
 /data/vendor/ramdump(/.*)? u:object_r:ramdump_vendor_data_file:s0
 /data/vendor/rild(/.*)? u:object_r:rild_vendor_data_file:s0
+/data/vendor/sensors(/.*)? u:object_r:sensor_data_file:s0
 /data/vendor/sensors/debug(/.*)? u:object_r:sensor_debug_data_file:s0
 /data/vendor/sensors/registry(/.*)? u:object_r:sensor_reg_data_file:s0
 /data/vendor/slog(/.*)? u:object_r:vendor_slog_file:s0
@@ -63,6 +64,7 @@
 /dev/acd-chre_bt_offload_data_tx u:object_r:aoc_device:s0
 /dev/acd-chre_ctl u:object_r:aoc_device:s0
 /dev/acd-chre_data_rx u:object_r:aoc_device:s0
+/dev/acd-chre_data_rx_nonwake u:object_r:aoc_device:s0
 /dev/acd-chre_data_tx u:object_r:aoc_device:s0
 /dev/acd-com.google.bt u:object_r:aoc_device:s0
 /dev/acd-com.google.bt.non_wake_up u:object_r:aoc_device:s0
@@ -70,7 +72,11 @@
 /dev/acd-com.google.chre.non_wake_up u:object_r:aoc_device:s0
 /dev/acd-com.google.umfw_stat u:object_r:aoc_device:s0
 /dev/acd-com.google.usf u:object_r:aoc_device:s0
+/dev/acd-com.google.usf.a3 u:object_r:aoc_device:s0
+/dev/acd-com.google.usf.a3.non_wake_up u:object_r:aoc_device:s0
 /dev/acd-com.google.usf.non_wake_up u:object_r:aoc_device:s0
+/dev/acd-com.google.usf.sc u:object_r:aoc_device:s0
+/dev/acd-com.google.usf.sc.non_wake_up u:object_r:aoc_device:s0
 /dev/acd-debug u:object_r:aoc_device:s0
 /dev/acd-hotword_notification u:object_r:aoc_device:s0
 /dev/acd-hotword_pcm u:object_r:aoc_device:s0
@@ -146,6 +152,8 @@
 /dev/ispolin_ranging u:object_r:lwis_device:s0
 /dev/logbuffer_bd u:object_r:logbuffer_device:s0
 /dev/logbuffer_btlpm u:object_r:logbuffer_device:s0
+/dev/logbuffer_btwakelock0 u:object_r:logbuffer_device:s0
+/dev/logbuffer_btwakelock1 u:object_r:logbuffer_device:s0
 /dev/logbuffer_cpif u:object_r:logbuffer_device:s0
 /dev/logbuffer_cpm u:object_r:logbuffer_device:s0
 /dev/logbuffer_dsim0 u:object_r:display_log_device:s0
@@ -284,7 +292,6 @@
 /mnt/vendor/persist/uwb(/.*)? u:object_r:persist_uwb_file:s0
 /mnt/vendor/ramdump(/.*)? u:object_r:ramdump_vendor_mnt_file:s0
 /sys/devices/platform/[0-9a-z]+\.ufs/pixel/enable_pixel_ufs_logging u:object_r:sysfs_scsi_devices_0000:s0
-/system_ext/bin/hw/vendor\.google\.edgetpu_app_service@1\.0-service u:object_r:edgetpu_app_server_exec:s0
 /vendor/bin/CitadelProvision u:object_r:citadel_provision_exec:s0
 /vendor/bin/android\.hardware\.biometrics\.face-service\.pixel u:object_r:hal_face_default_exec:s0
 /vendor/bin/aocd u:object_r:aocd_exec:s0
@@ -337,7 +344,7 @@
 /vendor/bin/hw/android\.hardware\.contexthub-service\.generic u:object_r:hal_contexthub_default_exec:s0
 /vendor/bin/hw/android\.hardware\.drm-service\.clearkey u:object_r:hal_drm_clearkey_exec:s0
 /vendor/bin/hw/android\.hardware\.drm-service\.widevine u:object_r:hal_drm_widevine_exec:s0
-/vendor/bin/hw/android\.hardware\.dumpstate-service u:object_r:hal_dumpstate_default_exec:s0
+/vendor/bin/hw/android\.hardware\.dumpstate\.3-service u:object_r:hal_dumpstate_default_exec:s0
 /vendor/bin/hw/android\.hardware\.edgetpu\.logging@service-edgetpu-logging u:object_r:edgetpu_logging_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper-service\.trusty u:object_r:hal_gatekeeper_default_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper@1\.0-service\.trusty u:object_r:hal_gatekeeper_default_exec:s0
@@ -434,7 +441,7 @@
 /vendor/lib(64)?/vendor-pixelatoms-cpp\.so u:object_r:same_process_hal_file:s0
 /vendor/lib64/arm\.mali\.platform-V1-ndk\.so u:object_r:same_process_hal_file:s0
 /vendor/lib64/arm\.mali\.platform-V2-ndk\.so u:object_r:same_process_hal_file:s0
-/vendor/lib64/com\.google\.edgetpu_app_service-V[1-4]-ndk\.so u:object_r:same_process_hal_file:s0
+/vendor/lib64/com\.google\.edgetpu_app_service-V[1-6]-ndk\.so u:object_r:same_process_hal_file:s0
 /vendor/lib64/com\.google\.edgetpu_vendor_service-V[1-2]-ndk\.so u:object_r:same_process_hal_file:s0
 /vendor/lib64/libedgetpu_client\.google\.so u:object_r:same_process_hal_file:s0
 /vendor/lib64/libedgetpu_litert\.so u:object_r:same_process_hal_file:s0
