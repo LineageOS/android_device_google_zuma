@@ -669,9 +669,6 @@ PRODUCT_PACKAGES += \
     android.hardware.nfc-service.st
 
 # Overlays
-DEVICE_PACKAGE_OVERLAYS += \
-    device/google/zuma/overlay-lineage
-
 PRODUCT_PACKAGES += \
     DMServiceOverlayProductZuma \
     EuiccSupportPixelOverlay \
@@ -702,8 +699,10 @@ PRODUCT_PACKAGES += \
     TelephonyProviderOverlayProductZuma
 
 PRODUCT_PACKAGES += \
+    FrameworkResOverlayLineageZuma \
     LineageSdkOverlayZuma \
-    SettingsOverlayZuma
+    SettingsOverlayZuma \
+    SimpleDeviceConfigOverlayZuma
 
 # Parts
 PRODUCT_PACKAGES += \
