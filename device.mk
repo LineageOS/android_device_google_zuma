@@ -195,9 +195,6 @@ PRODUCT_VENDOR_PROPERTIES += \
 # b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
 PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 
-DEVICE_PACKAGE_OVERLAYS += device/google/zuma/overlay
-DEVICE_PACKAGE_OVERLAYS += device/google/zuma/overlay-lineage
-
 # This device is shipped with 34 (Android U)
 PRODUCT_SHIPPING_API_LEVEL := 34
 
@@ -328,10 +325,6 @@ PRODUCT_PROPERTY_OVERRIDES += audio.spatializer.effect.util_clamp_min=300
 # Camera
 PRODUCT_SOONG_NAMESPACES += \
     hardware/google/camera
-
-# Connectivity
-PRODUCT_PACKAGES += \
-        ConnectivityOverlay
 
 # Storage health HAL
 PRODUCT_PACKAGES += \
@@ -473,9 +466,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.bluetooth.bqr.event_mask?=30 \
 	persist.bluetooth.bqr.min_interval_ms=500
-
-PRODUCT_ENFORCE_RRO_TARGETS := \
-	framework-res
 
 # Dynamic Partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
@@ -628,10 +618,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.vendor.camera.extensions.package=com.google.android.apps.camera.services \
     ro.vendor.camera.extensions.service=com.google.android.apps.camera.services.extensions.service.PixelExtensions
 
-# EUICC
-PRODUCT_PACKAGES += \
-    EuiccSupportPixelOverlay
-
 # Lineage Health
 include hardware/google/pixel/lineage_health/device.mk
 
@@ -643,6 +629,39 @@ $(call soong_config_set_bool,lineage_health,charging_control_supports_toggle,fal
 PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += \
     device/google/zuma/linker.config.json
 
+# Overlays
+DEVICE_PACKAGE_OVERLAYS += \
+    device/google/zuma/overlay-lineage
+
+PRODUCT_PACKAGES += \
+    DMServiceOverlayProductZuma \
+    EuiccSupportPixelOverlay \
+    FrameworkResOverlayProductZuma \
+    FrameworkResOverlayVendorZuma \
+    GlanceableHubConfigOverlay \
+    GlanceableHubSettingsConfigOverlay \
+    GlanceableHubSettingsConfigOverlay2022 \
+    GlanceableHubSysuiConfigOverlay \
+    GoogleConfigOverlay \
+    GooglePermissionControllerSafetyCenterOverlay \
+    PixelConfigOverlay2019 \
+    PixelConfigOverlay2021 \
+    PixelConfigOverlayCommon \
+    PixelConnectivityOverlay2023 \
+    PixelDisplayServiceOverlayProductZuma \
+    PixelNfcOverlayCommon \
+    PixelTetheringOverlay2021 \
+    PixelWifiOverlay2024_midyearZuma \
+    SafetyRegulatoryInfoOverlayProductZuma \
+    SettingsGoogleOverlayProductZuma \
+    SettingsProviderOverlayProductZuma \
+    SystemUIGoogleOverlayProductZuma \
+    SystemUIGoogleOverlayVendorZuma \
+    TeleServiceOverlayProductZuma \
+    TeleServiceOverlayVendorZuma \
+    TelecomOverlayProductZuma \
+    TelephonyProviderOverlayProductZuma
+
 # Parts
 PRODUCT_PACKAGES += \
     GoogleParts
@@ -650,10 +669,6 @@ PRODUCT_PACKAGES += \
 # Properties
 TARGET_PRODUCT_PROP += device/google/zuma/product.prop
 TARGET_SYSTEM_EXT_PROP += device/google/zuma/system_ext.prop
-
-# Tethering
-PRODUCT_PACKAGES += \
-    TetheringOverlay
 
 # Touch
 include hardware/google/pixel/touch/device.mk
