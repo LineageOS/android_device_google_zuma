@@ -698,6 +698,10 @@ PRODUCT_PACKAGES += \
     TelecomOverlayProductZuma \
     TelephonyProviderOverlayProductZuma
 
+PRODUCT_PACKAGES += \
+    LineageSdkOverlayZuma \
+    SettingsOverlayZuma
+
 # Parts
 PRODUCT_PACKAGES += \
     GoogleParts
