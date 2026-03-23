@@ -18,20 +18,34 @@ TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_VARIANT := cortex-a55
 
-BOARD_KERNEL_CMDLINE += earlycon=exynos4210,0x10870000 console=ttySAC0,115200 androidboot.console=ttySAC0 printk.devkmsg=on
-BOARD_KERNEL_CMDLINE += cma_sysfs.experimental=Y
-BOARD_KERNEL_CMDLINE += rcupdate.rcu_expedited=1 rcu_nocbs=all rcutree.enable_rcu_lazy
-BOARD_KERNEL_CMDLINE += swiotlb=noforce
-BOARD_KERNEL_CMDLINE += cgroup.memory=nokmem
-BOARD_KERNEL_CMDLINE += disable_dma32=on
-BOARD_KERNEL_CMDLINE += sysctl.kernel.sched_pelt_multiplier=4
+BOARD_BOOTCONFIG += \
+    androidboot.load_modules_parallel=true \
+    androidboot.boot_devices=13200000.ufs
 
-# Normal (non-_fullmte) builds should disable kasan
-ifeq (,$(filter %_fullmte,$(TARGET_PRODUCT)))
-BOARD_KERNEL_CMDLINE += kasan=off
-endif
-
-BOARD_BOOTCONFIG += androidboot.boot_devices=13200000.ufs
+BOARD_KERNEL_CMDLINE += \
+    fips140.load_sequential=1 \
+    exynos_drm.load_sequential=1 \
+    g2d.load_sequential=1 \
+    samsung_iommu_v9.load_sequential=1 \
+    swiotlb=noforce \
+    disable_dma32=on \
+    earlycon=exynos4210,0x10870000 \
+    console=ttySAC0,115200 \
+    androidboot.console=ttySAC0 \
+    printk.devkmsg=on \
+    cma_sysfs.experimental=Y \
+    cgroup_disable=memory \
+    rcupdate.rcu_expedited=1 \
+    rcu_nocbs=all \
+    rcutree.enable_rcu_lazy \
+    swiotlb=1024 \
+    cgroup.memory=nokmem \
+    sysctl.kernel.sched_pelt_multiplier=4 \
+    rodata=on \
+    kasan=off \
+    at24.write_timeout=100 \
+    log_buf_len=1024K \
+    android_arch_task_struct_size=512
 
 TARGET_NO_BOOTLOADER := true
 BOARD_PREBUILT_BOOTIMAGE := $(wildcard $(TARGET_KERNEL_DIR)/boot.img)
@@ -250,12 +264,6 @@ SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
 
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += \
     device/google/zuma/sepolicy/system_ext/public
-
-# Battery options
-BOARD_KERNEL_CMDLINE += at24.write_timeout=100
-
-# Enable larger logbuf
-BOARD_KERNEL_CMDLINE += log_buf_len=1024K
 
 # Protected VM firmware
 BOARD_PVMFWIMAGE_PARTITION_SIZE := 0x00100000
