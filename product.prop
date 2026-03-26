@@ -81,4 +81,16 @@ persist.settings.large_screen_opt.enabled=false
 persist.settings.large_screen_opt_for_dp.enabled=true
 
 # ZRAM
+mm.zram.maintenance.first_delay_seconds=86400
+mm.zram.maintenance.periodic_delay_seconds=86400
+mmd.zram.comp_algorithm=lz77eh
+mmd.zram.enabled=true
+mmd.zram.size=50%
+mmd.zram.writeback.device_size=1073741824
+mmd.zram.writeback.enabled=true
+mmd.zram.writeback.huge_idle.enabled=false
+mmd.zram.writeback.idle.enabled=true
+mmd.zram.writeback.limit.enabled=false
+mmd.zram.writeback.max_idle_seconds=86400
+mmd.zram.writeback.min_idle_seconds=0
 ro.zram_backing_device_min_free_mb=1536
