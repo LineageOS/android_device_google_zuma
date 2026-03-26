@@ -3,6 +3,8 @@ aaudio.hw_burst_min_usec=2000
 aaudio.mmap_exclusive_policy=2
 aaudio.mmap_policy=2
 audio.spatializer.effect.util_clamp_min=300
+persist.vendor.app.audio.gsenet.version=1
+persist.vendor.audio.cca.enabled=false
 persist.vendor.audio.cca.unsupported=false
 ro.audio.monitorRotation=true
 ro.audio.offload_wakelock=false
@@ -14,9 +16,12 @@ vendor.audio_hal.aidl.enable=true
 vendor.battery_mitigation.aidl.enable=true
 
 # Bluetooth
-persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac-opus
 persist.bluetooth.a2dp_offload.disabled=false
 ro.bluetooth.a2dp_offload.supported=true
+
+# Camera
+persist.vendor.camera.exif_reveal_make_model=true
+persist.vendor.camera.front_720P_always_binning=true
 
 # Codec2
 debug.c2.use_dmabufheaps=1
@@ -30,19 +35,38 @@ ro.vendor.gpu.dataspace=1
 # Crypto
 ro.crypto.volume.options=aes-256-xts:aes-256-hctr2
 
+# DCK
+ro.gms.dck.se_capability=1
+
+# Device family
+ro.build.device_family=HK3SB3AK3
+
 # Display
 debug.hwc.winupdate=1
 debug.slsi_platform=1
 ro.vendor.ddk.set.afbc=1
+vendor.display.lbe.supported=1
 vendor.hwc.dpp.downscale=4
+vendor.primarydisplay.lhbm.frames_to_reach_peak_brightness=0
+
+# DRM
+drm.service.enabled=true
+media.mediadrmservice.enable=true
 
 # EdgeTPU
 vendor.edgetpu.cpu_scheduler.policy=FIFO
 vendor.edgetpu.cpu_scheduler.priority=99
 vendor.edgetpu.tflite_delegate.force_disable_io_coherency=0
+vendor.google.silicon.enable_iif_for_priv_app=1
 
 # Factory reset
 ro.crypto.metadata_init_delete_all_keys.enabled=true
+
+# Fingerprint
+persist.vendor.udfps.als_feed_forward_supported=true
+persist.vendor.udfps.auto_exposure_compensation_supported=true
+persist.vendor.udfps.fps_touch_handler_supported=false
+persist.vendor.udfps.lhbm_controlled_in_hal_supported=true
 
 # FRP
 ro.frp.pst=/dev/block/by-name/frp
@@ -74,6 +98,13 @@ ro.oem_unlock_supported=1
 
 # OMX
 vendor.media.omx=0
+
+# Power
+vendor.powerhal.apf_disabled=false
+vendor.powerhal.apf_enabled=true
+
+# Rescue party
+persist.device_config.configuration.disable_rescue_party=true
 
 # SoC
 ro.soc.manufacturer=Google
@@ -126,11 +157,14 @@ persist.vendor.radio.multisim_switch_support=true
 persist.vendor.ril.crash_handling_mode=2
 persist.vendor.ril.db_ecc.id.type=5
 persist.vendor.ril.db_ecc.use.iccid_to_plmn=1
+persist.vendor.ril.ecc.use.xml=1
 persist.vendor.ril.enable_set_screen_state=1
 persist.vendor.ril.log.base_dir=/data/vendor/radio/sit-ril
 persist.vendor.ril.log.chunk_size=5242880
 persist.vendor.ril.log.num_file=3
 persist.vendor.ril.log_mask=3
+persist.vendor.ril.support_nr_ds=1
+persist.vendor.ril.use_radio_hal=2.1
 persist.vendor.sys.modem.logging.br_num=5
 persist.vendor.sys.modem.logging.enable=true
 persist.vendor.sys.silentlog.tcp=On
@@ -138,18 +172,30 @@ persist.vendor.verbose_logging_enabled=false
 ro.telephony.default_network=27
 ro.vendor.cbd.modem_removable=1
 ro.vendor.cbd.modem_type=s5100sit
+ro.vendor.config.build_carrier=europen
 ro.vendor.sys.modem.logging.loc=/data/vendor/slog
 telephony.active_modems.max_count=2
+vendor.rild.libpath=libsitril.so
 
 # Thermal
 persist.vendor.enable.thermal.genl=true
 
 # USB
 persist.vendor.usb.displayport.enabled=1
+ro.usb.uvc.enabled=true
+
+# Vibrator
+persist.vendor.vibrator.hal.context.cooldowntime=1600
+persist.vendor.vibrator.hal.context.enable=false
+persist.vendor.vibrator.hal.context.fade=true
+persist.vendor.vibrator.hal.context.settlingtime=5000
 
 # Watchdog
 framework_watchdog.fatal_count=3
 framework_watchdog.fatal_window.second=600
+
+# ZRAM
+vendor.zram.size=50p
 
 # Zygote
 zygote.critical_window.minute=10
