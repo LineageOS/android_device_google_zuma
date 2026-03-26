@@ -59,6 +59,14 @@ ro.preventative_fsck=1
 # FUSE passthrough
 persist.sys.fuse.passthrough.enable=true
 
+# MTE
+persist.arm64.memtag.app.com.android.nfc=off
+persist.arm64.memtag.app.com.android.se=off
+persist.arm64.memtag.app.com.android.bluetooth=off
+persist.arm64.memtag.system_server=off
+ro.arm64.memtag.bootctl_device_policy_manager=true
+ro.arm64.memtag.bootctl_supported=1
+
 # Postinstall
 ro.postinstall.fstab.prefix=/product
 
