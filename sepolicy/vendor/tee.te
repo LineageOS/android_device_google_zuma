@@ -1,3 +1,5 @@
+type tee_persist_block_device, dev_type;
+
 binder_call(tee, vold)
 
 read_fstab(tee)

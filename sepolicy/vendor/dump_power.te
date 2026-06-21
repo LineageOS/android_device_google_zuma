@@ -1,5 +1,7 @@
 pixel_bugreport(dump_power)
 
+type sysfs_power_dump, fs_type, sysfs_type;
+
 allow dump_power battery_mitigation_exec:file execute_no_trans;
 allow dump_power logbuffer_device:chr_file r_file_perms;
 allow dump_power mitigation_vendor_data_file:dir rw_dir_perms;

@@ -1,3 +1,5 @@
+type rild_vendor_data_file, data_file_type, file_type;
+
 add_hwservice(rild, hal_exynos_rild_hwservice)
 
 add_service(rild, hal_ril_ext_service)
@@ -28,9 +30,6 @@ r_dir_file(rild, modem_img_file)
 set_prop(rild, telephony_ril_prop)
 set_prop(rild, vendor_modem_prop)
 set_prop(rild, vendor_rild_prop)
-
-unix_socket_connect(rild, property, tombstoned)
-unix_socket_connect(rild, tombstoned_crash, init)
 
 allow rild hal_audio_ext_service:service_manager find;
 allow rild mnt_vendor_file:dir r_dir_perms;

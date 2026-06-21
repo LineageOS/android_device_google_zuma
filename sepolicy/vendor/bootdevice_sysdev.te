@@ -1,3 +1,0 @@
-type bootdevice_sysdev, dev_type;
-
-allow bootdevice_sysdev sysfs:filesystem associate;

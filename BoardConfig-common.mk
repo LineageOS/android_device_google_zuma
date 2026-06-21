@@ -260,7 +260,6 @@ BOARD_VENDOR_SEPOLICY_DIRS += \
     hardware/google/pixel-sepolicy/input \
     hardware/google/pixel-sepolicy/powerstats \
     device/google/zuma/sepolicy/certificates \
-    device/google/zuma/sepolicy/recovery \
     device/google/zuma/sepolicy/vendor
 
 PRODUCT_PRIVATE_SEPOLICY_DIRS += \

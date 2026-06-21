@@ -1,3 +1,5 @@
 pixel_bugreport(dump_display_logbuffer)
 
+type display_log_device, dev_type;
+
 allow dump_display_logbuffer display_log_device:chr_file r_file_perms;

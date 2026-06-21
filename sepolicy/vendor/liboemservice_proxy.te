@@ -23,7 +23,7 @@ allow liboemservice_proxy_default node:tcp_socket node_bind;
 allow liboemservice_proxy_default radio_device:chr_file rw_file_perms;
 allow liboemservice_proxy_default radio_vendor_data_file:dir create_dir_perms;
 allow liboemservice_proxy_default radio_vendor_data_file:file create_file_perms;
-allow liboemservice_proxy_default self:tcp_socket { accept create_socket_perms_no_ioctl listen };
+allow liboemservice_proxy_default self:tcp_socket { create_socket_perms_no_ioctl accept listen };
 allow liboemservice_proxy_default serial_device:chr_file rw_file_perms;
 allow liboemservice_proxy_default vendor_slog_file:dir create_dir_perms;
 allow liboemservice_proxy_default vendor_slog_file:file create_file_perms;

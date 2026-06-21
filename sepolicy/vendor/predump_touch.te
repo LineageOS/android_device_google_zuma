@@ -1,5 +1,6 @@
 type predump_touch, domain;
 type predump_touch_exec, exec_type, file_type, vendor_file_type;
+type proc_touch_gti, fs_type, proc_type;
 
 init_daemon_domain(predump_touch)
 
