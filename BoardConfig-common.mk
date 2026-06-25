@@ -34,7 +34,6 @@ BOARD_KERNEL_CMDLINE += \
     androidboot.console=ttySAC0 \
     printk.devkmsg=on \
     cma_sysfs.experimental=Y \
-    cgroup_disable=memory \
     rcupdate.rcu_expedited=1 \
     rcu_nocbs=all \
     rcutree.enable_rcu_lazy \
