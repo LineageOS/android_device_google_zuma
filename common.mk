@@ -365,7 +365,6 @@ PRODUCT_PACKAGES += \
     SystemUIGoogleOverlayVendorZuma \
     TeleServiceOverlayProductZuma \
     TeleServiceOverlayVendorZuma \
-    TelecomOverlayProductZuma \
     TelephonyProviderOverlayProductZuma
 
 PRODUCT_PACKAGES += \
