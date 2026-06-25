@@ -29,12 +29,14 @@ bluetooth.profile.pan.panu.enabled?=true
 bluetooth.profile.pbap.server.enabled?=true
 bluetooth.profile.sap.server.enabled?=true
 bluetooth.profile.vcp.controller.enabled?=true
+bluetooth.sco.managed_by_audio=true
 persist.bluetooth.a2dp_aac.vbr_supported=true
 persist.bluetooth.bqr.event_mask=295262
 persist.bluetooth.bqr.min_interval_ms=500
 persist.bluetooth.bqr.vnd_quality_mask=16
 persist.bluetooth.bqr.vnd_trace_mask=0
-persist.bluetooth.leaudio.allow_list=SM-R510,WF-1000XM5,SM-R630,G2,AG2,WH-1000XM6,G3,AG3,880066-0100,G4,AG4
+persist.bluetooth.leaudio.allow_list=SM-R510,WF-1000XM5,SM-R630,WH-1000XM6,880066-0100,G4,G5,AG4,AG5,LinkBuds Fit,WF-1000XM6
+persist.bluetooth.leaudio.allow_list_extend=LinkBuds Open
 persist.bluetooth.leaudio.notify.idle.during.call=true
 persist.bluetooth.leaudio_offload.disabled=false
 persist.bluetooth.vendor.btsnoop=false
@@ -43,8 +45,11 @@ ro.bluetooth.leaudio_offload.supported=true
 ro.bluetooth.leaudio_switcher.supported=true
 
 # Camera
+ro.frameworks.camera2.extension.service=com.google.android.apps.camera.services.extensions.service.CameraExtensions
 ro.vendor.camera.extensions.package=com.google.android.apps.camera.services
-ro.vendor.camera.extensions.service=com.google.android.apps.camera.services.extensions.service.PixelExtensions
+
+# Device family
+ro.build.device_family=HK3SB3AK3
 
 # Dumpstate
 dumpstate.strict_run=false
@@ -76,6 +81,10 @@ vendor.powerhal.adpf.rate=16666666
 # Quick start
 ro.quick_start.oem_id=00e0
 
+# Strongbox
+ro.strongbox.manufacturer=Google
+ro.strongbox.model=Titan-M2
+
 # Telephony
 persist.radio.multisim.config=dsds
 persist.radio.reboot_on_modem_change=false
@@ -101,4 +110,5 @@ mmd.zram.writeback.idle.enabled=true
 mmd.zram.writeback.limit.enabled=false
 mmd.zram.writeback.max_idle_seconds=86400
 mmd.zram.writeback.min_idle_seconds=0
+mmd.zram.writeback.use_nr_tags_prop=true
 ro.zram_backing_device_min_free_mb=1536
