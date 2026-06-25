@@ -16,13 +16,16 @@
 
     <!-- IWLAN data service package name to bind to by default. If none is specified in an overlay,
          an empty string is passed in -->
-    <string name="config_wlan_data_service_package">com.google.android.iwlan</string>
+    <string name="config_wlan_data_service_package" translatable="false">com.google.android.iwlan</string>
 
     <!-- IWLAN network service package name to bind to by default. If none is specified in an
          overlay, an empty string is passed in -->
-    <string name="config_wlan_network_service_package">com.google.android.iwlan</string>
+    <string name="config_wlan_network_service_package" translatable="false">com.google.android.iwlan</string>
 
     <!-- Boolean indicating whether allow sending null to modem to clear the previous initial attach
          data profile -->
     <bool name="allow_clear_initial_attach_data_profile">true</bool>
+
+    <!-- Whether to wait for carrier config loaded before using operator name to publish from modem. -->
+    <bool name="config_update_operator_name_after_carrier_config_loaded">true</bool>
 </resources>
