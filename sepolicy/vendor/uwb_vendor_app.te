@@ -1,3 +1,0 @@
-type uwb_vendor_app, domain;
-
-app_domain(uwb_vendor_app)

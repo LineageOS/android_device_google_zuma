@@ -1,5 +1,6 @@
 hal_client_domain(grilservice_app, hal_power_stats)
 
+binder_call(grilservice_app, hal_audio_default)
 binder_call(grilservice_app, hal_audiometricext_default)
 binder_call(grilservice_app, hal_bluetooth_btlinux)
 binder_call(grilservice_app, hal_radioext_default)
@@ -12,6 +13,7 @@ set_prop(grilservice_app, vendor_logger_prop)
 set_prop(grilservice_app, vendor_modem_prop)
 
 allow grilservice_app app_api_service:service_manager find;
+allow grilservice_app hal_audio_ext_service:service_manager find;
 allow grilservice_app hal_audiometricext_hwservice:hwservice_manager find;
 allow grilservice_app hal_bluetooth_coexistence_hwservice:hwservice_manager find;
 allow grilservice_app hal_bluetooth_coexistence_service:service_manager find;

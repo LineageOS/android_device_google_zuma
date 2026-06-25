@@ -1,0 +1,10 @@
+type trusty_coverage_controller, domain;
+type trusty_coverage_controller_exec, exec_type, file_type, vendor_file_type;
+type trusty_coverage_data_file, data_file_type, file_type;
+
+init_daemon_domain(trusty_coverage_controller)
+
+allow trusty_coverage_controller dmabuf_system_heap_device:chr_file r_file_perms;
+allow trusty_coverage_controller tee_device:chr_file rw_file_perms;
+allow trusty_coverage_controller trusty_coverage_data_file:dir create_dir_perms;
+allow trusty_coverage_controller trusty_coverage_data_file:file create_file_perms;
