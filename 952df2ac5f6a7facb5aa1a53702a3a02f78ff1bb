@@ -16,6 +16,24 @@
       "message": "duplicate? merge into 492106",
       "revId": "952df2ac5f6a7facb5aa1a53702a3a02f78ff1bb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c77833e_ec3ec03c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-06-26T18:32:30Z",
+      "side": 1,
+      "message": "492106 is overlay",
+      "parentUuid": "58833ca2_d35b8918",
+      "revId": "952df2ac5f6a7facb5aa1a53702a3a02f78ff1bb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
