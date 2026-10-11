@@ -91,6 +91,7 @@ vendor.modem. u:object_r:vendor_modem_prop:s0
 vendor.nos.citadel.version u:object_r:vendor_nos_citadel_version:s0
 vendor.perf.allow_experiments u:object_r:vendor_perf_allow_experiments_prop:s0
 vendor.pixel.system.phenotype. u:object_r:vendor_pss_systemphenotype_prop:s0
+vendor.pixel.system.phenotype.Perf__pixelmd_config u:object_r:vendor_pixelmd_config_experiment_prop:s0
 vendor.pixellogger. u:object_r:vendor_logger_prop:s0
 vendor.pktrouter u:object_r:vendor_ims_prop:s0
 vendor.radio. u:object_r:vendor_rild_prop:s0

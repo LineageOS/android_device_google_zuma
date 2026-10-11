@@ -8,6 +8,8 @@ system_public_prop(vendor_modem_prop)
 system_public_prop(vendor_rild_prop)
 system_public_prop(vendor_secure_element_prop)
 
+system_restricted_prop(vendor_pixelmd_config_experiment_prop)
+
 system_vendor_config_prop(vendor_camera_pbcs_debug_prop)
 system_vendor_config_prop(vendor_edgetpu_cpu_scheduler_prop)
 system_vendor_config_prop(vendor_edgetpu_runtime_prop)
