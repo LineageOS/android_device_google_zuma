@@ -6,6 +6,7 @@ android.hardware.security.sharedsecret.ISharedSecret/strongbox u:object_r:hal_sh
 aocx.IAocx/default u:object_r:aocx:s0
 arm.mali.platform.ICompression/default u:object_r:arm_mali_platform_service:s0
 com.google.android.imageprocessing.hal.IImageProcessingHal/default u:object_r:vendor_image_processing_hal_service:s0
+com.google.android.lyric.intelligentcamerahal.IIntelligentCameraHal/default u:object_r:vendor_intelligent_camera_hal_service:s0
 com.google.edgetpu.IEdgeTpuVendorService/default u:object_r:edgetpu_vendor_service:s0
 com.google.edgetpu.dba.IDevice/default u:object_r:edgetpu_dba_service:s0
 com.google.edgetpu.tachyon.IComputeService/default u:object_r:edgetpu_tachyon_service:s0
@@ -44,6 +45,7 @@ vendor.google.camera_ext.ICameraInterferenceAvoidance/default u:object_r:vendor_
 vendor.google.hardware.biometrics.face.IFaceExt/default u:object_r:hal_face_ext_service:s0
 vendor.google.plat_security.ISecureTimestamp/default u:object_r:hal_plat_security_service:s0
 vendor.google.plat_security.ITrustyDecrypt/default u:object_r:hal_plat_security_service:s0
+vendor.google.radio_ext.IRadioExt/default u:object_r:hal_radio_ext_service:s0
 vendor.google.whitechapel.audio.extension.IAudioExtension/default u:object_r:hal_audio_ext_service:s0
 vendor.google.wireless_charger.IWirelessCharger/default u:object_r:hal_wireless_charger_service:s0
 vendor.google.wireless_charger.service.IWlcService/default u:object_r:hal_wlcservice_service:s0
