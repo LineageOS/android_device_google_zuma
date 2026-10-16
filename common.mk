@@ -353,10 +353,6 @@ PRODUCT_PACKAGES += \
     SettingsOverlayZuma \
     SimpleDeviceConfigOverlayZuma
 
-# Parts
-PRODUCT_PACKAGES += \
-    GoogleParts
-
 # Properties
 TARGET_PRODUCT_PROP += device/google/zuma/product.prop
 TARGET_SYSTEM_EXT_PROP += device/google/zuma/system_ext.prop
