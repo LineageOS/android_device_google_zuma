@@ -4,6 +4,7 @@ type custom_ab_block_device, dev_type;
 type efs_block_device, dev_type;
 type faceauth_heap_device, dev_type, dmabuf_heap_device_type;
 type gxp_device, dev_type, mlstrustedobject;
+type hw_jpg_device, dev_type, mlstrustedobject;
 type logbuffer_device, dev_type;
 type modem_block_device, dev_type;
 type modem_userdata_block_device, dev_type;

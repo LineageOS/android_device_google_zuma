@@ -1,4 +1,3 @@
-type hw_jpg_device, dev_type, mlstrustedobject;
 type lwis_device, dev_type;
 type vendor_camera_data_file, data_file_type, file_type;
 type vendor_camera_interference_avoidance_service, hal_service_type, protected_service, service_manager_type;
